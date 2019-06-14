@@ -596,4 +596,18 @@ impl Trezor {
 			}),
 		)
 	}
+
+	pub fn sign_identity(
+		&mut self,
+		identity: protos::IdentityType,
+		digest: Vec<u8>,
+		curve: String,
+	) -> Result<TrezorResponse<Vec<u8>, protos::SignedIdentity>> {
+		let mut req = protos::SignIdentity::new();
+		req.set_identity(identity);
+		req.set_challenge_hidden(digest);
+		req.set_challenge_visual("".to_owned());
+		req.set_ecdsa_curve_name(curve);
+		self.call(req, Box::new(|_, m| Ok(m.get_signature().to_owned())))
+	}
 }
