@@ -4,7 +4,7 @@ use bitcoin::network::constants::Network; //TODO(stevenroose) change after https
 use bitcoin::util::bip32;
 use bitcoin::util::psbt;
 use bitcoin::Address;
-use hex;
+use primitive_types::U256;
 use secp256k1;
 use unicode_normalization::UnicodeNormalization;
 
@@ -23,6 +23,17 @@ pub use protos::ButtonRequest_ButtonRequestType as ButtonRequestType;
 pub use protos::Features;
 pub use protos::InputScriptType;
 pub use protos::PinMatrixRequest_PinMatrixRequestType as PinMatrixRequestType;
+
+#[derive(Debug, Clone, PartialEq, Eq, Copy)]
+/// An ECDSA signature
+pub struct Signature {
+	/// R value
+	pub r: U256,
+	/// S Value
+	pub s: U256,
+	/// V value in 'Electrum' notation.
+	pub v: u64,
+}
 
 /// The different options for the number of words in a seed phrase.
 pub enum WordCount {
@@ -609,5 +620,91 @@ impl Trezor {
 		req.set_challenge_visual("".to_owned());
 		req.set_ecdsa_curve_name(curve);
 		self.call(req, Box::new(|_, m| Ok(m.get_signature().to_owned())))
+	}
+
+	// ETHEREUM
+	pub fn ethereum_get_address(&mut self, path: Vec<u32>) -> Result<Vec<u8>> {
+		let mut req = protos::EthereumGetAddress::new();
+		req.set_address_n(path);
+		self.call(req, Box::new(|_, m: protos::EthereumAddress| Ok(m.get_address().to_vec())))
+			.unwrap()
+			.ok()
+	}
+
+	pub fn ethereum_sign_message(&mut self, message: Vec<u8>, path: Vec<u32>) -> Result<Signature> {
+		let mut req = protos::EthereumSignMessage::new();
+		req.set_address_n(path);
+		req.set_message(message);
+		self.call(
+			req,
+			Box::new(|_, m: protos::EthereumMessageSignature| {
+				let signature = m.get_signature();
+
+				let v = signature[0] as u64;
+				let r = U256::from_big_endian(&signature[1..33]);
+				let s = U256::from_big_endian(&signature[33..]);
+
+				Ok(Signature {
+					r,
+					v,
+					s,
+				})
+			})
+		).unwrap().ok()
+	}
+
+	pub fn ethereum_sign_tx(
+		&mut self,
+		path: Vec<u32>,
+		nonce: Vec<u8>,
+		gas_price: Vec<u8>,
+		gas_limit: Vec<u8>,
+		to: Vec<u8>,
+		value: Vec<u8>,
+		_data: Vec<u8>,
+		chain_id: u32,
+	) -> Result<Signature> {
+		let mut req = protos::EthereumSignTx::new();
+		let mut data = _data.clone();
+
+		req.set_address_n(path);
+		req.set_nonce(nonce);
+		req.set_gas_limit(gas_limit);
+		req.set_gas_price(gas_price);
+		req.set_value(value);
+		req.set_chain_id(chain_id);
+		req.set_tx_type(0);
+		req.set_to(to);
+
+		req.set_data_length(data.len() as u32);
+		req.set_data_initial_chunk(data.splice(..1024, []).collect());
+
+		let mut resp = self
+			.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))
+			.unwrap()
+			.ok()
+			.unwrap();
+
+		while resp.get_data_length() > 0 {
+			let mut ack = protos::EthereumTxAck::new();
+			ack.set_data_chunk(data.splice(..1024, []).collect());
+
+			resp = self
+				.call(ack, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))
+				.unwrap()
+				.ok()
+				.unwrap();
+		}
+
+		if resp.get_signature_v() <= 1 {
+			resp.set_signature_v(resp.get_signature_v() + 2 * chain_id + 35);
+			// v, r, s
+		}
+
+		Ok(Signature {
+			r: resp.get_signature_r().into(),
+			v: resp.get_signature_v().into(),
+			s: resp.get_signature_s().into(),
+		})
 	}
 }
