@@ -6,7 +6,7 @@
 #![allow(clippy::all)]
 
 #![allow(unused_attributes)]
-#![rustfmt::skip]
+
 
 #![allow(box_pointers)]
 #![allow(dead_code)]
@@ -2545,7 +2545,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
 static file_descriptor_proto_lazy: ::protobuf::rt::LazyV2<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::rt::LazyV2::INIT;
 
 fn parse_descriptor_proto() -> ::protobuf::descriptor::FileDescriptorProto {
-    ::protobuf::parse_from_bytes(file_descriptor_proto_data).unwrap()
+    ::protobuf::Message::parse_from_bytes(file_descriptor_proto_data).unwrap()
 }
 
 pub fn file_descriptor_proto() -> &'static ::protobuf::descriptor::FileDescriptorProto {
