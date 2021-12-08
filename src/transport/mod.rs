@@ -46,7 +46,7 @@ impl ProtoMessage {
 
 	/// Take the payload from the ProtoMessage and parse it to a protobuf message.
 	pub fn into_message<M: protobuf::Message>(self) -> Result<M, protobuf::error::ProtobufError> {
-		Ok(protobuf::parse_from_bytes(&self.into_payload())?)
+		Ok(protobuf::Message::parse_from_bytes(&self.into_payload())?)
 	}
 }
 

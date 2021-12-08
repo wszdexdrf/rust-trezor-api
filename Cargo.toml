@@ -15,6 +15,8 @@ log = "0.4.5"
 hex = "0.3.2"
 unicode-normalization = "0.1.7"
 
+"primitive-types" = "0.10.1"
+
 bitcoin = "0.18.0"
 bitcoin_hashes = "0.3"
 bitcoin-bech32 = "0.9.0"
