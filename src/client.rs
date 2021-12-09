@@ -1,5 +1,4 @@
 use std::fmt;
-use std::any::type_name;
 
 use bitcoin::network::constants::Network; //TODO(stevenroose) change after https://github.com/rust-bitcoin/rust-bitcoin/pull/181
 use bitcoin::util::bip32;
@@ -24,10 +23,6 @@ pub use protos::ButtonRequest_ButtonRequestType as ButtonRequestType;
 pub use protos::Features;
 pub use protos::InputScriptType;
 pub use protos::PinMatrixRequest_PinMatrixRequestType as PinMatrixRequestType;
-
-fn type_of<T>(_: T) -> &'static str {
-    type_name::<T>()
-}
 
 #[derive(Debug, Clone, PartialEq, Eq, Copy)]
 /// An ECDSA signature
@@ -753,6 +748,10 @@ impl Trezor {
 		})
 	}
 
+	// use std::any::type_name;
+	// fn type_of<T>(_: T) -> &'static str {
+	// 	type_name::<T>()
+	// }	
 	// pub fn ethereum_sign_eip712(
 	// 	&mut self,
 	// 	path: Vec<u32>
