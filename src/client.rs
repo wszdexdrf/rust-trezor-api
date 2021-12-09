@@ -38,10 +38,10 @@ pub struct Signature {
 /// Access list item
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AccessListItem {
-    /// Accessed address
-    pub address: String,
-    /// Accessed storage keys
-    pub storage_keys: Vec<Vec<u8>>,
+	/// Accessed address
+	pub address: String,
+	/// Accessed storage keys
+	pub storage_keys: Vec<Vec<u8>>,
 }
 
 /// The different options for the number of words in a seed phrase.
@@ -643,10 +643,10 @@ impl Trezor {
 		req.set_data_length(data.len() as u32);
 		req.set_data_initial_chunk(data.splice(..std::cmp::min(1024, data.len()), []).collect());
 
-		let mut resp = handle_interaction(self
-			.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))
-			.unwrap()
-		).unwrap();
+		let mut resp = handle_interaction(
+			self.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m))).unwrap(),
+		)
+		.unwrap();
 
 		while resp.get_data_length() > 0 {
 			let mut ack = protos::EthereumTxAck::new();
@@ -681,8 +681,8 @@ impl Trezor {
 		_data: Vec<u8>,
 		chain_id: u64,
 		max_gas_fee: Vec<u8>,
-	    max_priority_fee: Vec<u8>,
-		access_list: Vec<AccessListItem>
+		max_priority_fee: Vec<u8>,
+		access_list: Vec<AccessListItem>,
 	) -> Result<Signature> {
 		let mut req = protos::EthereumSignTxEIP1559::new();
 		let mut data = _data.clone();
@@ -703,27 +703,21 @@ impl Trezor {
 				let mut access = protos::EthereumSignTxEIP1559_EthereumAccessList::new();
 
 				access.set_address(item.address);
-				access.set_storage_keys(
-					protobuf::RepeatedField::from_vec(
-						item.storage_keys	
-					)
-				);
+				access.set_storage_keys(protobuf::RepeatedField::from_vec(item.storage_keys));
 
-				list_access.push(
-					access
-				)
+				list_access.push(access)
 			}
-			
+
 			req.set_access_list(protobuf::RepeatedField::from_vec(list_access.clone()));
 		}
 
 		req.set_data_length(data.len() as u32);
 		req.set_data_initial_chunk(data.splice(..std::cmp::min(1024, data.len()), []).collect());
 
-		let mut resp = handle_interaction(self
-			.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))
-			.unwrap()
-		).unwrap();
+		let mut resp = handle_interaction(
+			self.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m))).unwrap(),
+		)
+		.unwrap();
 
 		while resp.get_data_length() > 0 {
 			let mut ack = protos::EthereumTxAck::new();
@@ -751,7 +745,7 @@ impl Trezor {
 	// use std::any::type_name;
 	// fn type_of<T>(_: T) -> &'static str {
 	// 	type_name::<T>()
-	// }	
+	// }
 	// pub fn ethereum_sign_eip712(
 	// 	&mut self,
 	// 	path: Vec<u32>
@@ -779,7 +773,6 @@ impl Trezor {
 
 	// 	}
 
-
 	// // 	data: Dict[str, Any],
 	// // 	*,
 	// // 	metamask_v4_compat: bool = True,
@@ -801,8 +794,6 @@ impl Trezor {
 	// 		// request = messages.EthereumTypedDataStructAck(members=members)
 	// 		// response = client.call(request)
 
-
 	// 	Ok(())
 	// }
-
 }

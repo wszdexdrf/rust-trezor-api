@@ -22,8 +22,8 @@ extern crate rusb;
 extern crate unicode_normalization;
 #[macro_use]
 extern crate log;
-extern crate protobuf;
 extern crate primitive_types;
+extern crate protobuf;
 extern crate secp256k1;
 
 mod messages;

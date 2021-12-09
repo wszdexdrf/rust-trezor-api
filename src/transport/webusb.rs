@@ -1,5 +1,5 @@
-use std::{fmt, result::Result};
 use std::time::Duration;
+use std::{fmt, result::Result};
 
 use rusb::*;
 
