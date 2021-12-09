@@ -3,14 +3,14 @@
 use std::error;
 use std::fmt;
 
-use hid;
+use hidapi as hid;
 use rusb;
 
 /// Trezor error.
 #[derive(Debug)]
 pub enum Error {
 	/// Error from hidapi.
-	Hid(hid::Error),
+	Hid(hid::HidError),
 	/// Error from ruusb.
 	Usb(rusb::Error),
 	/// The device to connect to was not found.
@@ -35,8 +35,8 @@ pub enum Error {
 	NoDeviceSerial,
 }
 
-impl From<hid::Error> for Error {
-	fn from(e: hid::Error) -> Error {
+impl From<hid::HidError> for Error {
+	fn from(e: hid::HidError) -> Error {
 		Error::Hid(e)
 	}
 }

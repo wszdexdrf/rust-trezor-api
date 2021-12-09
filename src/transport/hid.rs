@@ -1,7 +1,6 @@
 use std::fmt;
-use std::time::Duration;
 
-use hid;
+use hidapi as hid;
 
 use super::super::AvailableDevice;
 use transport::error::Error;
@@ -46,8 +45,8 @@ impl fmt::Display for AvailableHidTransport {
 /// An actual serial HID USB link to a device over which bytes can be sent.
 pub struct HidLink {
 	hid_version: HidVersion,
-	_hid_manager: hid::Manager,
-	handle: Option<hid::Handle>,
+	_hid_manager: hid::HidApi,
+	handle: Option<hid::HidDevice>,
 }
 
 impl Drop for HidLink {
@@ -68,36 +67,30 @@ impl Link for HidLink {
 				payload
 			}
 		};
-		self.handle.as_mut().unwrap().data().write(payload)?;
+		self.handle.as_mut().unwrap().write(payload.as_slice())?;
 		Ok(())
 	}
 
 	fn read_chunk(&mut self) -> Result<Vec<u8>, Error> {
 		let mut chunk = vec![0; 64];
 		//TODO(stevenroose) have different timeouts for messages that do user input
-		match self
-			.handle
-			.as_mut()
-			.unwrap()
-			.data()
-			.read(&mut chunk, Duration::from_millis(READ_TIMEOUT_MS))?
-		{
-			Some(64) => Ok(chunk),
-			None => Err(Error::DeviceReadTimeout),
-			Some(chunk_size) => Err(Error::UnexpectedChunkSizeFromDevice(chunk_size)),
+		match self.handle.as_mut().unwrap().read_timeout(&mut chunk, READ_TIMEOUT_MS as i32) {
+			Ok(64) => Ok(chunk),
+			Err(_) => Err(Error::DeviceReadTimeout),
+			Ok(chunk_size) => Err(Error::UnexpectedChunkSizeFromDevice(chunk_size)),
 		}
 	}
 }
 
 /// Derive from the HID device whether or not it is a debugable device or not.
 /// It returns None for not-recognized devices.
-fn derive_debug(dev: &hid::Device) -> Option<bool> {
+fn derive_debug(dev: &hid::DeviceInfo) -> Option<bool> {
 	if dev.usage_page() == constants::DEBUGLINK_USAGE
-		|| dev.interface_number() == constants::DEBUGLINK_INTERFACE
+		|| dev.interface_number() == constants::DEBUGLINK_INTERFACE as i32
 	{
 		Some(true)
 	} else if dev.usage_page() == constants::WIRELINK_USAGE
-		|| dev.interface_number() == constants::WIRELINK_INTERFACE
+		|| dev.interface_number() == constants::WIRELINK_INTERFACE as i32
 	{
 		Some(false)
 	} else {
@@ -106,16 +99,16 @@ fn derive_debug(dev: &hid::Device) -> Option<bool> {
 }
 
 /// Probe the HID version for a Trezor 1 device.
-fn probe_hid_version(handle: &mut hid::Handle) -> Result<HidVersion, Error> {
+fn probe_hid_version(handle: &mut hid::HidDevice) -> Result<HidVersion, Error> {
 	let mut w = vec![0xff; 65];
 	w[0] = 0;
 	w[1] = 63;
-	if handle.data().write(w)? == 65 {
+	if handle.write(w.as_slice())? == 65 {
 		return Ok(HidVersion::V2);
 	}
 	let mut w = vec![0xff; 64];
 	w[0] = 63;
-	if handle.data().write(w)? == 64 {
+	if handle.write(w.as_slice())? == 64 {
 		return Ok(HidVersion::V1);
 	}
 	Err(Error::UnknownHidVersion)
@@ -129,9 +122,9 @@ pub struct HidTransport {
 impl HidTransport {
 	/// Find devices using the HID transport.
 	pub fn find_devices(debug: bool) -> Result<Vec<AvailableDevice>, Error> {
-		let hidman = hid::init()?;
+		let hidman = hid::HidApi::new()?;
 		let mut devices = Vec::new();
-		for dev in hidman.devices() {
+		for dev in hidman.device_list() {
 			let dev_id = (dev.vendor_id(), dev.product_id());
 			let model = match derive_model(dev_id) {
 				Some(m) => m,
@@ -149,7 +142,7 @@ impl HidTransport {
 				model: model,
 				debug: debug,
 				transport: AvailableDeviceTransport::Hid(AvailableHidTransport {
-					serial_nb: serial,
+					serial_nb: serial.into(),
 				}),
 			});
 		}
@@ -164,17 +157,17 @@ impl HidTransport {
 		};
 
 		// Traverse all actual devices again and find the matching one.
-		let hidman = hid::init()?;
+		let hidman = hid::HidApi::new()?;
 
 		let mut handle = hidman
-			.devices()
+			.device_list()
 			.find_map(|dev| {
 				let dev_id = (dev.vendor_id(), dev.product_id());
 				if derive_model(dev_id) == Some(device.model.clone())
 					&& derive_debug(&dev) == Some(device.debug)
-					&& dev.serial_number() == Some(transport.serial_nb.clone())
+					&& dev.serial_number() == Some(transport.serial_nb.as_str())
 				{
-					Some(dev.open())
+					Some(hidman.open(dev.vendor_id(), dev.product_id()))
 				} else {
 					None
 				}
