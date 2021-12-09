@@ -625,11 +625,69 @@ impl Trezor {
 
 		req.set_address_n(path);
 		req.set_nonce(nonce);
-		req.set_gas_limit(gas_limit);
 		req.set_gas_price(gas_price);
+		req.set_gas_limit(gas_limit);
 		req.set_value(value);
 		req.set_chain_id(chain_id);
-		// req.set_tx_type(0);
+		req.set_to(to);
+
+		let len = data.len();
+		let v: Vec<u8> = data.clone().splice(..len, []).collect();
+
+		req.set_data_length(data.len() as u32);
+		req.set_data_initial_chunk(data.splice(..std::cmp::min(1024, data.len()), []).collect());
+
+		let mut resp = handle_interaction(self
+			.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))
+			.unwrap()
+		).unwrap();
+
+		while resp.get_data_length() > 0 {
+			let mut ack = protos::EthereumTxAck::new();
+			ack.set_data_chunk(data.splice(..1024, []).collect());
+
+			resp = self
+				.call(ack, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))
+				.unwrap()
+				.ok()
+				.unwrap();
+		}
+
+		if resp.get_signature_v() <= 1 {
+			resp.set_signature_v(resp.get_signature_v() + 2 * (chain_id as u32) + 35);
+			// v, r, s
+		}
+
+		Ok(Signature {
+			r: resp.get_signature_r().into(),
+			v: resp.get_signature_v().into(),
+			s: resp.get_signature_s().into(),
+		})
+	}
+
+	pub fn ethereum_sign_eip1559_tx(
+		&mut self,
+		path: Vec<u32>,
+		nonce: Vec<u8>,
+		gas_limit: Vec<u8>,
+		to: String,
+		value: Vec<u8>,
+		_data: Vec<u8>,
+		chain_id: u64,
+		max_gas_fee: Option<Vec<u8>>,
+	    max_priority_fee: Option<Vec<u8>>
+    	// access_list: List[ethereum.messages.EthereumAccessList],
+	) -> Result<Signature> {
+		let mut req = protos::EthereumSignTxEIP1559::new();
+		let mut data = _data.clone();
+
+		req.set_address_n(path);
+		req.set_nonce(nonce);
+		req.set_max_gas_fee(max_gas_fee.unwrap());
+		req.set_max_priority_fee(max_priority_fee.unwrap());
+		req.set_gas_limit(gas_limit);
+		req.set_value(value);
+		req.set_chain_id(chain_id);
 		req.set_to(to);
 
 		let len = data.len();

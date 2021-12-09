@@ -87,6 +87,7 @@ trezor_message_impl!(DebugLinkFlashErase, MessageType_DebugLinkFlashErase);
 trezor_message_impl!(EthereumGetAddress, MessageType_EthereumGetAddress);
 trezor_message_impl!(EthereumAddress, MessageType_EthereumAddress);
 trezor_message_impl!(EthereumSignTx, MessageType_EthereumSignTx);
+trezor_message_impl!(EthereumSignTxEIP1559, MessageType_EthereumSignTxEIP1559);
 trezor_message_impl!(EthereumTxRequest, MessageType_EthereumTxRequest);
 trezor_message_impl!(EthereumTxAck, MessageType_EthereumTxAck);
 trezor_message_impl!(EthereumSignMessage, MessageType_EthereumSignMessage);
