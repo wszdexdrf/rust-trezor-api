@@ -142,8 +142,11 @@ impl<'a, T, R: TrezorMessage> PassphraseRequest<'a, T, R> {
 
 	/// Ack the request without a passphrase to let the user enter it on the device
 	/// and get the next message from the device.
-	pub fn ack(self) -> Result<TrezorResponse<'a, T, R>> {
-		let req = protos::PassphraseAck::new();
+	pub fn ack(self, on_device: bool) -> Result<TrezorResponse<'a, T, R>> {
+		let mut req = protos::PassphraseAck::new();
+		if on_device {
+			req.set_on_device(on_device);
+		}
 		self.client.call(req, self.result_handler)
 	}
 }
@@ -295,6 +298,20 @@ impl<'a, T, R: TrezorMessage> TrezorResponse<'a, T, R> {
 				Err(Error::UnexpectedInteractionRequest(InteractionType::Passphrase))
 			}
 		}
+	}
+}
+
+fn handle_interaction<T, R: TrezorMessage>(resp: TrezorResponse<T, R>) -> Result<T> {
+	match resp {
+		TrezorResponse::Ok(res) => Ok(res),
+		TrezorResponse::Failure(_) => resp.ok(), // assering ok() returns the failure error
+		TrezorResponse::ButtonRequest(req) => handle_interaction(req.ack()?),
+		TrezorResponse::PinMatrixRequest(_) => Err(Error::UnsupportedNetwork),
+		TrezorResponse::PassphraseRequest(req) => handle_interaction({
+			let on_device = req.on_device();
+			req.ack(!on_device)?
+		}),
+		TrezorResponse::PassphraseStateRequest(req) => handle_interaction(req.ack()?),
 	}
 }
 
@@ -623,12 +640,18 @@ impl Trezor {
 	}
 
 	// ETHEREUM
-	pub fn ethereum_get_address(&mut self, path: Vec<u32>) -> Result<Vec<u8>> {
+	pub fn ethereum_get_address(&mut self, path: Vec<u32>) -> Result<String> {
 		let mut req = protos::EthereumGetAddress::new();
-		req.set_address_n(path);
-		self.call(req, Box::new(|_, m: protos::EthereumAddress| Ok(m.get_address().to_vec())))
-			.unwrap()
-			.ok()
+		req.set_address_n(path.clone());
+		println!("{:?}", path);
+		println!("{:?}", req);
+		Ok(handle_interaction(
+			self.call(req, Box::new(|_, m: protos::EthereumAddress|{ 
+				Ok(m.get_address().into())
+			}))
+				.unwrap(),
+		)
+		.unwrap())
 	}
 
 	pub fn ethereum_sign_message(&mut self, message: Vec<u8>, path: Vec<u32>) -> Result<Signature> {
@@ -649,8 +672,10 @@ impl Trezor {
 					v,
 					s,
 				})
-			})
-		).unwrap().ok()
+			}),
+		)
+		.unwrap()
+		.ok()
 	}
 
 	pub fn ethereum_sign_tx(
@@ -659,10 +684,10 @@ impl Trezor {
 		nonce: Vec<u8>,
 		gas_price: Vec<u8>,
 		gas_limit: Vec<u8>,
-		to: Vec<u8>,
+		to: String,
 		value: Vec<u8>,
 		_data: Vec<u8>,
-		chain_id: u32,
+		chain_id: u64,
 	) -> Result<Signature> {
 		let mut req = protos::EthereumSignTx::new();
 		let mut data = _data.clone();
@@ -697,7 +722,7 @@ impl Trezor {
 		}
 
 		if resp.get_signature_v() <= 1 {
-			resp.set_signature_v(resp.get_signature_v() + 2 * chain_id + 35);
+			resp.set_signature_v(resp.get_signature_v() + 2 * (chain_id as u32) + 35);
 			// v, r, s
 		}
 

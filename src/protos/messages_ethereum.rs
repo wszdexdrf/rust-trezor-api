@@ -24,6 +24,435 @@
 // const _PROTOBUF_VERSION_CHECK: () = ::protobuf::VERSION_2_25_2;
 
 #[derive(PartialEq,Clone,Default)]
+pub struct EthereumGetPublicKey {
+    // message fields
+    pub address_n: ::std::vec::Vec<u32>,
+    show_display: ::std::option::Option<bool>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a EthereumGetPublicKey {
+    fn default() -> &'a EthereumGetPublicKey {
+        <EthereumGetPublicKey as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl EthereumGetPublicKey {
+    pub fn new() -> EthereumGetPublicKey {
+        ::std::default::Default::default()
+    }
+
+    // repeated uint32 address_n = 1;
+
+
+    pub fn get_address_n(&self) -> &[u32] {
+        &self.address_n
+    }
+    pub fn clear_address_n(&mut self) {
+        self.address_n.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_address_n(&mut self, v: ::std::vec::Vec<u32>) {
+        self.address_n = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_address_n(&mut self) -> &mut ::std::vec::Vec<u32> {
+        &mut self.address_n
+    }
+
+    // Take field
+    pub fn take_address_n(&mut self) -> ::std::vec::Vec<u32> {
+        ::std::mem::replace(&mut self.address_n, ::std::vec::Vec::new())
+    }
+
+    // optional bool show_display = 2;
+
+
+    pub fn get_show_display(&self) -> bool {
+        self.show_display.unwrap_or(false)
+    }
+    pub fn clear_show_display(&mut self) {
+        self.show_display = ::std::option::Option::None;
+    }
+
+    pub fn has_show_display(&self) -> bool {
+        self.show_display.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_show_display(&mut self, v: bool) {
+        self.show_display = ::std::option::Option::Some(v);
+    }
+}
+
+impl ::protobuf::Message for EthereumGetPublicKey {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_repeated_uint32_into(wire_type, is, &mut self.address_n)?;
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_bool()?;
+                    self.show_display = ::std::option::Option::Some(tmp);
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        for value in &self.address_n {
+            my_size += ::protobuf::rt::value_size(1, *value, ::protobuf::wire_format::WireTypeVarint);
+        };
+        if let Some(v) = self.show_display {
+            my_size += 2;
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        for v in &self.address_n {
+            os.write_uint32(1, *v)?;
+        };
+        if let Some(v) = self.show_display {
+            os.write_bool(2, v)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: ::std::boxed::Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> EthereumGetPublicKey {
+        EthereumGetPublicKey::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
+        descriptor.get(|| {
+            let mut fields = ::std::vec::Vec::new();
+            fields.push(::protobuf::reflect::accessor::make_vec_accessor::<_, ::protobuf::types::ProtobufTypeUint32>(
+                "address_n",
+                |m: &EthereumGetPublicKey| { &m.address_n },
+                |m: &mut EthereumGetPublicKey| { &mut m.address_n },
+            ));
+            fields.push(::protobuf::reflect::accessor::make_option_accessor::<_, ::protobuf::types::ProtobufTypeBool>(
+                "show_display",
+                |m: &EthereumGetPublicKey| { &m.show_display },
+                |m: &mut EthereumGetPublicKey| { &mut m.show_display },
+            ));
+            ::protobuf::reflect::MessageDescriptor::new_pb_name::<EthereumGetPublicKey>(
+                "EthereumGetPublicKey",
+                fields,
+                file_descriptor_proto()
+            )
+        })
+    }
+
+    fn default_instance() -> &'static EthereumGetPublicKey {
+        static instance: ::protobuf::rt::LazyV2<EthereumGetPublicKey> = ::protobuf::rt::LazyV2::INIT;
+        instance.get(EthereumGetPublicKey::new)
+    }
+}
+
+impl ::protobuf::Clear for EthereumGetPublicKey {
+    fn clear(&mut self) {
+        self.address_n.clear();
+        self.show_display = ::std::option::Option::None;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for EthereumGetPublicKey {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for EthereumGetPublicKey {
+    fn as_ref(&self) -> ::protobuf::reflect::ReflectValueRef {
+        ::protobuf::reflect::ReflectValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct EthereumPublicKey {
+    // message fields
+    pub node: ::protobuf::SingularPtrField<super::messages_common::HDNodeType>,
+    xpub: ::protobuf::SingularField<::std::string::String>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a EthereumPublicKey {
+    fn default() -> &'a EthereumPublicKey {
+        <EthereumPublicKey as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl EthereumPublicKey {
+    pub fn new() -> EthereumPublicKey {
+        ::std::default::Default::default()
+    }
+
+    // required .hw.trezor.messages.common.HDNodeType node = 1;
+
+
+    pub fn get_node(&self) -> &super::messages_common::HDNodeType {
+        self.node.as_ref().unwrap_or_else(|| <super::messages_common::HDNodeType as ::protobuf::Message>::default_instance())
+    }
+    pub fn clear_node(&mut self) {
+        self.node.clear();
+    }
+
+    pub fn has_node(&self) -> bool {
+        self.node.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_node(&mut self, v: super::messages_common::HDNodeType) {
+        self.node = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_node(&mut self) -> &mut super::messages_common::HDNodeType {
+        if self.node.is_none() {
+            self.node.set_default();
+        }
+        self.node.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_node(&mut self) -> super::messages_common::HDNodeType {
+        self.node.take().unwrap_or_else(|| super::messages_common::HDNodeType::new())
+    }
+
+    // required string xpub = 2;
+
+
+    pub fn get_xpub(&self) -> &str {
+        match self.xpub.as_ref() {
+            Some(v) => &v,
+            None => "",
+        }
+    }
+    pub fn clear_xpub(&mut self) {
+        self.xpub.clear();
+    }
+
+    pub fn has_xpub(&self) -> bool {
+        self.xpub.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_xpub(&mut self, v: ::std::string::String) {
+        self.xpub = ::protobuf::SingularField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_xpub(&mut self) -> &mut ::std::string::String {
+        if self.xpub.is_none() {
+            self.xpub.set_default();
+        }
+        self.xpub.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_xpub(&mut self) -> ::std::string::String {
+        self.xpub.take().unwrap_or_else(|| ::std::string::String::new())
+    }
+}
+
+impl ::protobuf::Message for EthereumPublicKey {
+    fn is_initialized(&self) -> bool {
+        if self.node.is_none() {
+            return false;
+        }
+        if self.xpub.is_none() {
+            return false;
+        }
+        for v in &self.node {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.node)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_string_into(wire_type, is, &mut self.xpub)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.node.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
+        if let Some(ref v) = self.xpub.as_ref() {
+            my_size += ::protobuf::rt::string_size(2, &v);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.node.as_ref() {
+            os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        }
+        if let Some(ref v) = self.xpub.as_ref() {
+            os.write_string(2, &v)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: ::std::boxed::Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> EthereumPublicKey {
+        EthereumPublicKey::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
+        descriptor.get(|| {
+            let mut fields = ::std::vec::Vec::new();
+            fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<super::messages_common::HDNodeType>>(
+                "node",
+                |m: &EthereumPublicKey| { &m.node },
+                |m: &mut EthereumPublicKey| { &mut m.node },
+            ));
+            fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                "xpub",
+                |m: &EthereumPublicKey| { &m.xpub },
+                |m: &mut EthereumPublicKey| { &mut m.xpub },
+            ));
+            ::protobuf::reflect::MessageDescriptor::new_pb_name::<EthereumPublicKey>(
+                "EthereumPublicKey",
+                fields,
+                file_descriptor_proto()
+            )
+        })
+    }
+
+    fn default_instance() -> &'static EthereumPublicKey {
+        static instance: ::protobuf::rt::LazyV2<EthereumPublicKey> = ::protobuf::rt::LazyV2::INIT;
+        instance.get(EthereumPublicKey::new)
+    }
+}
+
+impl ::protobuf::Clear for EthereumPublicKey {
+    fn clear(&mut self) {
+        self.node.clear();
+        self.xpub.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for EthereumPublicKey {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for EthereumPublicKey {
+    fn as_ref(&self) -> ::protobuf::reflect::ReflectValueRef {
+        ::protobuf::reflect::ReflectValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
 pub struct EthereumGetAddress {
     // message fields
     pub address_n: ::std::vec::Vec<u32>,
@@ -223,7 +652,8 @@ impl ::protobuf::reflect::ProtobufValue for EthereumGetAddress {
 #[derive(PartialEq,Clone,Default)]
 pub struct EthereumAddress {
     // message fields
-    address: ::protobuf::SingularField<::std::vec::Vec<u8>>,
+    _old_address: ::protobuf::SingularField<::std::vec::Vec<u8>>,
+    address: ::protobuf::SingularField<::std::string::String>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -240,13 +670,49 @@ impl EthereumAddress {
         ::std::default::Default::default()
     }
 
-    // required bytes address = 1;
+    // optional bytes _old_address = 1;
 
 
-    pub fn get_address(&self) -> &[u8] {
-        match self.address.as_ref() {
+    pub fn get__old_address(&self) -> &[u8] {
+        match self._old_address.as_ref() {
             Some(v) => &v,
             None => &[],
+        }
+    }
+    pub fn clear__old_address(&mut self) {
+        self._old_address.clear();
+    }
+
+    pub fn has__old_address(&self) -> bool {
+        self._old_address.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set__old_address(&mut self, v: ::std::vec::Vec<u8>) {
+        self._old_address = ::protobuf::SingularField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut__old_address(&mut self) -> &mut ::std::vec::Vec<u8> {
+        if self._old_address.is_none() {
+            self._old_address.set_default();
+        }
+        self._old_address.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take__old_address(&mut self) -> ::std::vec::Vec<u8> {
+        self._old_address.take().unwrap_or_else(|| ::std::vec::Vec::new())
+    }
+
+    // optional string address = 2;
+
+
+    pub fn get_address(&self) -> &str {
+        match self.address.as_ref() {
+            Some(v) => &v,
+            None => "",
         }
     }
     pub fn clear_address(&mut self) {
@@ -258,13 +724,13 @@ impl EthereumAddress {
     }
 
     // Param is passed by value, moved
-    pub fn set_address(&mut self, v: ::std::vec::Vec<u8>) {
+    pub fn set_address(&mut self, v: ::std::string::String) {
         self.address = ::protobuf::SingularField::some(v);
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_address(&mut self) -> &mut ::std::vec::Vec<u8> {
+    pub fn mut_address(&mut self) -> &mut ::std::string::String {
         if self.address.is_none() {
             self.address.set_default();
         }
@@ -272,16 +738,13 @@ impl EthereumAddress {
     }
 
     // Take field
-    pub fn take_address(&mut self) -> ::std::vec::Vec<u8> {
-        self.address.take().unwrap_or_else(|| ::std::vec::Vec::new())
+    pub fn take_address(&mut self) -> ::std::string::String {
+        self.address.take().unwrap_or_else(|| ::std::string::String::new())
     }
 }
 
 impl ::protobuf::Message for EthereumAddress {
     fn is_initialized(&self) -> bool {
-        if self.address.is_none() {
-            return false;
-        }
         true
     }
 
@@ -290,7 +753,10 @@ impl ::protobuf::Message for EthereumAddress {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self.address)?;
+                    ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self._old_address)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_string_into(wire_type, is, &mut self.address)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -304,8 +770,11 @@ impl ::protobuf::Message for EthereumAddress {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if let Some(ref v) = self.address.as_ref() {
+        if let Some(ref v) = self._old_address.as_ref() {
             my_size += ::protobuf::rt::bytes_size(1, &v);
+        }
+        if let Some(ref v) = self.address.as_ref() {
+            my_size += ::protobuf::rt::string_size(2, &v);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -313,8 +782,11 @@ impl ::protobuf::Message for EthereumAddress {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if let Some(ref v) = self.address.as_ref() {
+        if let Some(ref v) = self._old_address.as_ref() {
             os.write_bytes(1, &v)?;
+        }
+        if let Some(ref v) = self.address.as_ref() {
+            os.write_string(2, &v)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -355,6 +827,11 @@ impl ::protobuf::Message for EthereumAddress {
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
             fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                "_old_address",
+                |m: &EthereumAddress| { &m._old_address },
+                |m: &mut EthereumAddress| { &mut m._old_address },
+            ));
+            fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
                 "address",
                 |m: &EthereumAddress| { &m.address },
                 |m: &mut EthereumAddress| { &mut m.address },
@@ -375,6 +852,7 @@ impl ::protobuf::Message for EthereumAddress {
 
 impl ::protobuf::Clear for EthereumAddress {
     fn clear(&mut self) {
+        self._old_address.clear();
         self.address.clear();
         self.unknown_fields.clear();
     }
@@ -399,11 +877,11 @@ pub struct EthereumSignTx {
     nonce: ::protobuf::SingularField<::std::vec::Vec<u8>>,
     gas_price: ::protobuf::SingularField<::std::vec::Vec<u8>>,
     gas_limit: ::protobuf::SingularField<::std::vec::Vec<u8>>,
-    to: ::protobuf::SingularField<::std::vec::Vec<u8>>,
+    to: ::protobuf::SingularField<::std::string::String>,
     value: ::protobuf::SingularField<::std::vec::Vec<u8>>,
     data_initial_chunk: ::protobuf::SingularField<::std::vec::Vec<u8>>,
     data_length: ::std::option::Option<u32>,
-    chain_id: ::std::option::Option<u32>,
+    chain_id: ::std::option::Option<u64>,
     tx_type: ::std::option::Option<u32>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
@@ -452,7 +930,7 @@ impl EthereumSignTx {
     pub fn get_nonce(&self) -> &[u8] {
         match self.nonce.as_ref() {
             Some(v) => &v,
-            None => &[],
+            None => b"",
         }
     }
     pub fn clear_nonce(&mut self) {
@@ -482,7 +960,7 @@ impl EthereumSignTx {
         self.nonce.take().unwrap_or_else(|| ::std::vec::Vec::new())
     }
 
-    // optional bytes gas_price = 3;
+    // required bytes gas_price = 3;
 
 
     pub fn get_gas_price(&self) -> &[u8] {
@@ -518,7 +996,7 @@ impl EthereumSignTx {
         self.gas_price.take().unwrap_or_else(|| ::std::vec::Vec::new())
     }
 
-    // optional bytes gas_limit = 4;
+    // required bytes gas_limit = 4;
 
 
     pub fn get_gas_limit(&self) -> &[u8] {
@@ -554,13 +1032,13 @@ impl EthereumSignTx {
         self.gas_limit.take().unwrap_or_else(|| ::std::vec::Vec::new())
     }
 
-    // optional bytes to = 5;
+    // optional string to = 11;
 
 
-    pub fn get_to(&self) -> &[u8] {
+    pub fn get_to(&self) -> &str {
         match self.to.as_ref() {
             Some(v) => &v,
-            None => &[],
+            None => "",
         }
     }
     pub fn clear_to(&mut self) {
@@ -572,13 +1050,13 @@ impl EthereumSignTx {
     }
 
     // Param is passed by value, moved
-    pub fn set_to(&mut self, v: ::std::vec::Vec<u8>) {
+    pub fn set_to(&mut self, v: ::std::string::String) {
         self.to = ::protobuf::SingularField::some(v);
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_to(&mut self) -> &mut ::std::vec::Vec<u8> {
+    pub fn mut_to(&mut self) -> &mut ::std::string::String {
         if self.to.is_none() {
             self.to.set_default();
         }
@@ -586,8 +1064,8 @@ impl EthereumSignTx {
     }
 
     // Take field
-    pub fn take_to(&mut self) -> ::std::vec::Vec<u8> {
-        self.to.take().unwrap_or_else(|| ::std::vec::Vec::new())
+    pub fn take_to(&mut self) -> ::std::string::String {
+        self.to.take().unwrap_or_else(|| ::std::string::String::new())
     }
 
     // optional bytes value = 6;
@@ -596,7 +1074,7 @@ impl EthereumSignTx {
     pub fn get_value(&self) -> &[u8] {
         match self.value.as_ref() {
             Some(v) => &v,
-            None => &[],
+            None => b"",
         }
     }
     pub fn clear_value(&mut self) {
@@ -632,7 +1110,7 @@ impl EthereumSignTx {
     pub fn get_data_initial_chunk(&self) -> &[u8] {
         match self.data_initial_chunk.as_ref() {
             Some(v) => &v,
-            None => &[],
+            None => b"",
         }
     }
     pub fn clear_data_initial_chunk(&mut self) {
@@ -666,7 +1144,7 @@ impl EthereumSignTx {
 
 
     pub fn get_data_length(&self) -> u32 {
-        self.data_length.unwrap_or(0)
+        self.data_length.unwrap_or(0u32)
     }
     pub fn clear_data_length(&mut self) {
         self.data_length = ::std::option::Option::None;
@@ -681,10 +1159,10 @@ impl EthereumSignTx {
         self.data_length = ::std::option::Option::Some(v);
     }
 
-    // optional uint32 chain_id = 9;
+    // required uint64 chain_id = 9;
 
 
-    pub fn get_chain_id(&self) -> u32 {
+    pub fn get_chain_id(&self) -> u64 {
         self.chain_id.unwrap_or(0)
     }
     pub fn clear_chain_id(&mut self) {
@@ -696,7 +1174,7 @@ impl EthereumSignTx {
     }
 
     // Param is passed by value, moved
-    pub fn set_chain_id(&mut self, v: u32) {
+    pub fn set_chain_id(&mut self, v: u64) {
         self.chain_id = ::std::option::Option::Some(v);
     }
 
@@ -722,6 +1200,15 @@ impl EthereumSignTx {
 
 impl ::protobuf::Message for EthereumSignTx {
     fn is_initialized(&self) -> bool {
+        if self.gas_price.is_none() {
+            return false;
+        }
+        if self.gas_limit.is_none() {
+            return false;
+        }
+        if self.chain_id.is_none() {
+            return false;
+        }
         true
     }
 
@@ -741,8 +1228,8 @@ impl ::protobuf::Message for EthereumSignTx {
                 4 => {
                     ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self.gas_limit)?;
                 },
-                5 => {
-                    ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self.to)?;
+                11 => {
+                    ::protobuf::rt::read_singular_string_into(wire_type, is, &mut self.to)?;
                 },
                 6 => {
                     ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self.value)?;
@@ -761,7 +1248,7 @@ impl ::protobuf::Message for EthereumSignTx {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
                         return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
                     }
-                    let tmp = is.read_uint32()?;
+                    let tmp = is.read_uint64()?;
                     self.chain_id = ::std::option::Option::Some(tmp);
                 },
                 10 => {
@@ -796,7 +1283,7 @@ impl ::protobuf::Message for EthereumSignTx {
             my_size += ::protobuf::rt::bytes_size(4, &v);
         }
         if let Some(ref v) = self.to.as_ref() {
-            my_size += ::protobuf::rt::bytes_size(5, &v);
+            my_size += ::protobuf::rt::string_size(11, &v);
         }
         if let Some(ref v) = self.value.as_ref() {
             my_size += ::protobuf::rt::bytes_size(6, &v);
@@ -832,7 +1319,7 @@ impl ::protobuf::Message for EthereumSignTx {
             os.write_bytes(4, &v)?;
         }
         if let Some(ref v) = self.to.as_ref() {
-            os.write_bytes(5, &v)?;
+            os.write_string(11, &v)?;
         }
         if let Some(ref v) = self.value.as_ref() {
             os.write_bytes(6, &v)?;
@@ -844,7 +1331,7 @@ impl ::protobuf::Message for EthereumSignTx {
             os.write_uint32(8, v)?;
         }
         if let Some(v) = self.chain_id {
-            os.write_uint32(9, v)?;
+            os.write_uint64(9, v)?;
         }
         if let Some(v) = self.tx_type {
             os.write_uint32(10, v)?;
@@ -907,7 +1394,7 @@ impl ::protobuf::Message for EthereumSignTx {
                 |m: &EthereumSignTx| { &m.gas_limit },
                 |m: &mut EthereumSignTx| { &mut m.gas_limit },
             ));
-            fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+            fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
                 "to",
                 |m: &EthereumSignTx| { &m.to },
                 |m: &mut EthereumSignTx| { &mut m.to },
@@ -927,7 +1414,7 @@ impl ::protobuf::Message for EthereumSignTx {
                 |m: &EthereumSignTx| { &m.data_length },
                 |m: &mut EthereumSignTx| { &mut m.data_length },
             ));
-            fields.push(::protobuf::reflect::accessor::make_option_accessor::<_, ::protobuf::types::ProtobufTypeUint32>(
+            fields.push(::protobuf::reflect::accessor::make_option_accessor::<_, ::protobuf::types::ProtobufTypeUint64>(
                 "chain_id",
                 |m: &EthereumSignTx| { &m.chain_id },
                 |m: &mut EthereumSignTx| { &mut m.chain_id },
@@ -2181,7 +2668,7 @@ impl EthereumTxAck {
         ::std::default::Default::default()
     }
 
-    // optional bytes data_chunk = 1;
+    // required bytes data_chunk = 1;
 
 
     pub fn get_data_chunk(&self) -> &[u8] {
@@ -2220,6 +2707,9 @@ impl EthereumTxAck {
 
 impl ::protobuf::Message for EthereumTxAck {
     fn is_initialized(&self) -> bool {
+        if self.data_chunk.is_none() {
+            return false;
+        }
         true
     }
 
@@ -2546,8 +3036,8 @@ impl ::protobuf::reflect::ProtobufValue for EthereumSignMessage {
 #[derive(PartialEq,Clone,Default)]
 pub struct EthereumMessageSignature {
     // message fields
-    address: ::protobuf::SingularField<::std::vec::Vec<u8>>,
     signature: ::protobuf::SingularField<::std::vec::Vec<u8>>,
+    address: ::protobuf::SingularField<::std::string::String>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -2564,43 +3054,7 @@ impl EthereumMessageSignature {
         ::std::default::Default::default()
     }
 
-    // optional bytes address = 1;
-
-
-    pub fn get_address(&self) -> &[u8] {
-        match self.address.as_ref() {
-            Some(v) => &v,
-            None => &[],
-        }
-    }
-    pub fn clear_address(&mut self) {
-        self.address.clear();
-    }
-
-    pub fn has_address(&self) -> bool {
-        self.address.is_some()
-    }
-
-    // Param is passed by value, moved
-    pub fn set_address(&mut self, v: ::std::vec::Vec<u8>) {
-        self.address = ::protobuf::SingularField::some(v);
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_address(&mut self) -> &mut ::std::vec::Vec<u8> {
-        if self.address.is_none() {
-            self.address.set_default();
-        }
-        self.address.as_mut().unwrap()
-    }
-
-    // Take field
-    pub fn take_address(&mut self) -> ::std::vec::Vec<u8> {
-        self.address.take().unwrap_or_else(|| ::std::vec::Vec::new())
-    }
-
-    // optional bytes signature = 2;
+    // required bytes signature = 2;
 
 
     pub fn get_signature(&self) -> &[u8] {
@@ -2635,10 +3089,52 @@ impl EthereumMessageSignature {
     pub fn take_signature(&mut self) -> ::std::vec::Vec<u8> {
         self.signature.take().unwrap_or_else(|| ::std::vec::Vec::new())
     }
+
+    // required string address = 3;
+
+
+    pub fn get_address(&self) -> &str {
+        match self.address.as_ref() {
+            Some(v) => &v,
+            None => "",
+        }
+    }
+    pub fn clear_address(&mut self) {
+        self.address.clear();
+    }
+
+    pub fn has_address(&self) -> bool {
+        self.address.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_address(&mut self, v: ::std::string::String) {
+        self.address = ::protobuf::SingularField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_address(&mut self) -> &mut ::std::string::String {
+        if self.address.is_none() {
+            self.address.set_default();
+        }
+        self.address.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_address(&mut self) -> ::std::string::String {
+        self.address.take().unwrap_or_else(|| ::std::string::String::new())
+    }
 }
 
 impl ::protobuf::Message for EthereumMessageSignature {
     fn is_initialized(&self) -> bool {
+        if self.signature.is_none() {
+            return false;
+        }
+        if self.address.is_none() {
+            return false;
+        }
         true
     }
 
@@ -2646,11 +3142,11 @@ impl ::protobuf::Message for EthereumMessageSignature {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
-                1 => {
-                    ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self.address)?;
-                },
                 2 => {
                     ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self.signature)?;
+                },
+                3 => {
+                    ::protobuf::rt::read_singular_string_into(wire_type, is, &mut self.address)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -2664,11 +3160,11 @@ impl ::protobuf::Message for EthereumMessageSignature {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if let Some(ref v) = self.address.as_ref() {
-            my_size += ::protobuf::rt::bytes_size(1, &v);
-        }
         if let Some(ref v) = self.signature.as_ref() {
             my_size += ::protobuf::rt::bytes_size(2, &v);
+        }
+        if let Some(ref v) = self.address.as_ref() {
+            my_size += ::protobuf::rt::string_size(3, &v);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -2676,11 +3172,11 @@ impl ::protobuf::Message for EthereumMessageSignature {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if let Some(ref v) = self.address.as_ref() {
-            os.write_bytes(1, &v)?;
-        }
         if let Some(ref v) = self.signature.as_ref() {
             os.write_bytes(2, &v)?;
+        }
+        if let Some(ref v) = self.address.as_ref() {
+            os.write_string(3, &v)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -2721,14 +3217,14 @@ impl ::protobuf::Message for EthereumMessageSignature {
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
             fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                "address",
-                |m: &EthereumMessageSignature| { &m.address },
-                |m: &mut EthereumMessageSignature| { &mut m.address },
-            ));
-            fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                 "signature",
                 |m: &EthereumMessageSignature| { &m.signature },
                 |m: &mut EthereumMessageSignature| { &mut m.signature },
+            ));
+            fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                "address",
+                |m: &EthereumMessageSignature| { &m.address },
+                |m: &mut EthereumMessageSignature| { &mut m.address },
             ));
             ::protobuf::reflect::MessageDescriptor::new_pb_name::<EthereumMessageSignature>(
                 "EthereumMessageSignature",
@@ -2746,8 +3242,8 @@ impl ::protobuf::Message for EthereumMessageSignature {
 
 impl ::protobuf::Clear for EthereumMessageSignature {
     fn clear(&mut self) {
-        self.address.clear();
         self.signature.clear();
+        self.address.clear();
         self.unknown_fields.clear();
     }
 }
@@ -2767,9 +3263,9 @@ impl ::protobuf::reflect::ProtobufValue for EthereumMessageSignature {
 #[derive(PartialEq,Clone,Default)]
 pub struct EthereumVerifyMessage {
     // message fields
-    address: ::protobuf::SingularField<::std::vec::Vec<u8>>,
     signature: ::protobuf::SingularField<::std::vec::Vec<u8>>,
     message: ::protobuf::SingularField<::std::vec::Vec<u8>>,
+    address: ::protobuf::SingularField<::std::string::String>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -2786,43 +3282,7 @@ impl EthereumVerifyMessage {
         ::std::default::Default::default()
     }
 
-    // optional bytes address = 1;
-
-
-    pub fn get_address(&self) -> &[u8] {
-        match self.address.as_ref() {
-            Some(v) => &v,
-            None => &[],
-        }
-    }
-    pub fn clear_address(&mut self) {
-        self.address.clear();
-    }
-
-    pub fn has_address(&self) -> bool {
-        self.address.is_some()
-    }
-
-    // Param is passed by value, moved
-    pub fn set_address(&mut self, v: ::std::vec::Vec<u8>) {
-        self.address = ::protobuf::SingularField::some(v);
-    }
-
-    // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_address(&mut self) -> &mut ::std::vec::Vec<u8> {
-        if self.address.is_none() {
-            self.address.set_default();
-        }
-        self.address.as_mut().unwrap()
-    }
-
-    // Take field
-    pub fn take_address(&mut self) -> ::std::vec::Vec<u8> {
-        self.address.take().unwrap_or_else(|| ::std::vec::Vec::new())
-    }
-
-    // optional bytes signature = 2;
+    // required bytes signature = 2;
 
 
     pub fn get_signature(&self) -> &[u8] {
@@ -2858,7 +3318,7 @@ impl EthereumVerifyMessage {
         self.signature.take().unwrap_or_else(|| ::std::vec::Vec::new())
     }
 
-    // optional bytes message = 3;
+    // required bytes message = 3;
 
 
     pub fn get_message(&self) -> &[u8] {
@@ -2893,10 +3353,55 @@ impl EthereumVerifyMessage {
     pub fn take_message(&mut self) -> ::std::vec::Vec<u8> {
         self.message.take().unwrap_or_else(|| ::std::vec::Vec::new())
     }
+
+    // required string address = 4;
+
+
+    pub fn get_address(&self) -> &str {
+        match self.address.as_ref() {
+            Some(v) => &v,
+            None => "",
+        }
+    }
+    pub fn clear_address(&mut self) {
+        self.address.clear();
+    }
+
+    pub fn has_address(&self) -> bool {
+        self.address.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_address(&mut self, v: ::std::string::String) {
+        self.address = ::protobuf::SingularField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_address(&mut self) -> &mut ::std::string::String {
+        if self.address.is_none() {
+            self.address.set_default();
+        }
+        self.address.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_address(&mut self) -> ::std::string::String {
+        self.address.take().unwrap_or_else(|| ::std::string::String::new())
+    }
 }
 
 impl ::protobuf::Message for EthereumVerifyMessage {
     fn is_initialized(&self) -> bool {
+        if self.signature.is_none() {
+            return false;
+        }
+        if self.message.is_none() {
+            return false;
+        }
+        if self.address.is_none() {
+            return false;
+        }
         true
     }
 
@@ -2904,14 +3409,14 @@ impl ::protobuf::Message for EthereumVerifyMessage {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
-                1 => {
-                    ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self.address)?;
-                },
                 2 => {
                     ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self.signature)?;
                 },
                 3 => {
                     ::protobuf::rt::read_singular_bytes_into(wire_type, is, &mut self.message)?;
+                },
+                4 => {
+                    ::protobuf::rt::read_singular_string_into(wire_type, is, &mut self.address)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -2925,14 +3430,14 @@ impl ::protobuf::Message for EthereumVerifyMessage {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if let Some(ref v) = self.address.as_ref() {
-            my_size += ::protobuf::rt::bytes_size(1, &v);
-        }
         if let Some(ref v) = self.signature.as_ref() {
             my_size += ::protobuf::rt::bytes_size(2, &v);
         }
         if let Some(ref v) = self.message.as_ref() {
             my_size += ::protobuf::rt::bytes_size(3, &v);
+        }
+        if let Some(ref v) = self.address.as_ref() {
+            my_size += ::protobuf::rt::string_size(4, &v);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -2940,14 +3445,14 @@ impl ::protobuf::Message for EthereumVerifyMessage {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if let Some(ref v) = self.address.as_ref() {
-            os.write_bytes(1, &v)?;
-        }
         if let Some(ref v) = self.signature.as_ref() {
             os.write_bytes(2, &v)?;
         }
         if let Some(ref v) = self.message.as_ref() {
             os.write_bytes(3, &v)?;
+        }
+        if let Some(ref v) = self.address.as_ref() {
+            os.write_string(4, &v)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -2988,11 +3493,6 @@ impl ::protobuf::Message for EthereumVerifyMessage {
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
             fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
-                "address",
-                |m: &EthereumVerifyMessage| { &m.address },
-                |m: &mut EthereumVerifyMessage| { &mut m.address },
-            ));
-            fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                 "signature",
                 |m: &EthereumVerifyMessage| { &m.signature },
                 |m: &mut EthereumVerifyMessage| { &mut m.signature },
@@ -3001,6 +3501,11 @@ impl ::protobuf::Message for EthereumVerifyMessage {
                 "message",
                 |m: &EthereumVerifyMessage| { &m.message },
                 |m: &mut EthereumVerifyMessage| { &mut m.message },
+            ));
+            fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                "address",
+                |m: &EthereumVerifyMessage| { &m.address },
+                |m: &mut EthereumVerifyMessage| { &mut m.address },
             ));
             ::protobuf::reflect::MessageDescriptor::new_pb_name::<EthereumVerifyMessage>(
                 "EthereumVerifyMessage",
@@ -3018,9 +3523,9 @@ impl ::protobuf::Message for EthereumVerifyMessage {
 
 impl ::protobuf::Clear for EthereumVerifyMessage {
     fn clear(&mut self) {
-        self.address.clear();
         self.signature.clear();
         self.message.clear();
+        self.address.clear();
         self.unknown_fields.clear();
     }
 }
@@ -3038,239 +3543,283 @@ impl ::protobuf::reflect::ProtobufValue for EthereumVerifyMessage {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x17messages-ethereum.proto\x12\x1bhw.trezor.messages.ethereum\"T\n\
-    \x12EthereumGetAddress\x12\x1b\n\taddress_n\x18\x01\x20\x03(\rR\x08addre\
-    ssN\x12!\n\x0cshow_display\x18\x02\x20\x01(\x08R\x0bshowDisplay\"+\n\x0f\
-    EthereumAddress\x12\x18\n\x07address\x18\x01\x20\x02(\x0cR\x07address\"\
-    \xa6\x02\n\x0eEthereumSignTx\x12\x1b\n\taddress_n\x18\x01\x20\x03(\rR\
-    \x08addressN\x12\x14\n\x05nonce\x18\x02\x20\x01(\x0cR\x05nonce\x12\x1b\n\
-    \tgas_price\x18\x03\x20\x01(\x0cR\x08gasPrice\x12\x1b\n\tgas_limit\x18\
-    \x04\x20\x01(\x0cR\x08gasLimit\x12\x0e\n\x02to\x18\x05\x20\x01(\x0cR\x02\
-    to\x12\x14\n\x05value\x18\x06\x20\x01(\x0cR\x05value\x12,\n\x12data_init\
-    ial_chunk\x18\x07\x20\x01(\x0cR\x10dataInitialChunk\x12\x1f\n\x0bdata_le\
-    ngth\x18\x08\x20\x01(\rR\ndataLength\x12\x19\n\x08chain_id\x18\t\x20\x01\
-    (\rR\x07chainId\x12\x17\n\x07tx_type\x18\n\x20\x01(\rR\x06txType\"\x80\
-    \x04\n\x15EthereumSignTxEIP1559\x12\x1b\n\taddress_n\x18\x01\x20\x03(\rR\
-    \x08addressN\x12\x14\n\x05nonce\x18\x02\x20\x02(\x0cR\x05nonce\x12\x1e\n\
-    \x0bmax_gas_fee\x18\x03\x20\x02(\x0cR\tmaxGasFee\x12(\n\x10max_priority_\
-    fee\x18\x04\x20\x02(\x0cR\x0emaxPriorityFee\x12\x1b\n\tgas_limit\x18\x05\
-    \x20\x02(\x0cR\x08gasLimit\x12\x10\n\x02to\x18\x06\x20\x01(\t:\0R\x02to\
-    \x12\x14\n\x05value\x18\x07\x20\x02(\x0cR\x05value\x12.\n\x12data_initia\
-    l_chunk\x18\x08\x20\x01(\x0c:\0R\x10dataInitialChunk\x12\x1f\n\x0bdata_l\
-    ength\x18\t\x20\x02(\rR\ndataLength\x12\x19\n\x08chain_id\x18\n\x20\x02(\
-    \x04R\x07chainId\x12f\n\x0baccess_list\x18\x0b\x20\x03(\x0b2E.hw.trezor.\
-    messages.ethereum.EthereumSignTxEIP1559.EthereumAccessListR\naccessList\
-    \x1aQ\n\x12EthereumAccessList\x12\x18\n\x07address\x18\x01\x20\x02(\tR\
-    \x07address\x12!\n\x0cstorage_keys\x18\x02\x20\x03(\x0cR\x0bstorageKeys\
-    \"\x97\x01\n\x11EthereumTxRequest\x12\x1f\n\x0bdata_length\x18\x01\x20\
-    \x01(\rR\ndataLength\x12\x1f\n\x0bsignature_v\x18\x02\x20\x01(\rR\nsigna\
-    tureV\x12\x1f\n\x0bsignature_r\x18\x03\x20\x01(\x0cR\nsignatureR\x12\x1f\
-    \n\x0bsignature_s\x18\x04\x20\x01(\x0cR\nsignatureS\".\n\rEthereumTxAck\
-    \x12\x1d\n\ndata_chunk\x18\x01\x20\x01(\x0cR\tdataChunk\"L\n\x13Ethereum\
-    SignMessage\x12\x1b\n\taddress_n\x18\x01\x20\x03(\rR\x08addressN\x12\x18\
-    \n\x07message\x18\x02\x20\x02(\x0cR\x07message\"R\n\x18EthereumMessageSi\
-    gnature\x12\x18\n\x07address\x18\x01\x20\x01(\x0cR\x07address\x12\x1c\n\
-    \tsignature\x18\x02\x20\x01(\x0cR\tsignature\"i\n\x15EthereumVerifyMessa\
-    ge\x12\x18\n\x07address\x18\x01\x20\x01(\x0cR\x07address\x12\x1c\n\tsign\
-    ature\x18\x02\x20\x01(\x0cR\tsignature\x12\x18\n\x07message\x18\x03\x20\
-    \x01(\x0cR\x07messageB<\n#com.satoshilabs.trezor.lib.protobufB\x15Trezor\
-    MessageEthereumJ\x8d,\n\x06\x12\x04\0\0}\x01\n\x08\n\x01\x0c\x12\x03\0\0\
+    \n\x17messages-ethereum.proto\x12\x1bhw.trezor.messages.ethereum\x1a\x15\
+    messages-common.proto\"V\n\x14EthereumGetPublicKey\x12\x1b\n\taddress_n\
+    \x18\x01\x20\x03(\rR\x08addressN\x12!\n\x0cshow_display\x18\x02\x20\x01(\
+    \x08R\x0bshowDisplay\"b\n\x11EthereumPublicKey\x129\n\x04node\x18\x01\
+    \x20\x02(\x0b2%.hw.trezor.messages.common.HDNodeTypeR\x04node\x12\x12\n\
+    \x04xpub\x18\x02\x20\x02(\tR\x04xpub\"T\n\x12EthereumGetAddress\x12\x1b\
+    \n\taddress_n\x18\x01\x20\x03(\rR\x08addressN\x12!\n\x0cshow_display\x18\
+    \x02\x20\x01(\x08R\x0bshowDisplay\"Q\n\x0fEthereumAddress\x12$\n\x0c_old\
+    _address\x18\x01\x20\x01(\x0cR\nOldAddressB\x02\x18\x01\x12\x18\n\x07add\
+    ress\x18\x02\x20\x01(\tR\x07address\"\xb1\x02\n\x0eEthereumSignTx\x12\
+    \x1b\n\taddress_n\x18\x01\x20\x03(\rR\x08addressN\x12\x16\n\x05nonce\x18\
+    \x02\x20\x01(\x0c:\0R\x05nonce\x12\x1b\n\tgas_price\x18\x03\x20\x02(\x0c\
+    R\x08gasPrice\x12\x1b\n\tgas_limit\x18\x04\x20\x02(\x0cR\x08gasLimit\x12\
+    \x10\n\x02to\x18\x0b\x20\x01(\t:\0R\x02to\x12\x16\n\x05value\x18\x06\x20\
+    \x01(\x0c:\0R\x05value\x12.\n\x12data_initial_chunk\x18\x07\x20\x01(\x0c\
+    :\0R\x10dataInitialChunk\x12\"\n\x0bdata_length\x18\x08\x20\x01(\r:\x010\
+    R\ndataLength\x12\x19\n\x08chain_id\x18\t\x20\x02(\x04R\x07chainId\x12\
+    \x17\n\x07tx_type\x18\n\x20\x01(\rR\x06txType\"\x80\x04\n\x15EthereumSig\
+    nTxEIP1559\x12\x1b\n\taddress_n\x18\x01\x20\x03(\rR\x08addressN\x12\x14\
+    \n\x05nonce\x18\x02\x20\x02(\x0cR\x05nonce\x12\x1e\n\x0bmax_gas_fee\x18\
+    \x03\x20\x02(\x0cR\tmaxGasFee\x12(\n\x10max_priority_fee\x18\x04\x20\x02\
+    (\x0cR\x0emaxPriorityFee\x12\x1b\n\tgas_limit\x18\x05\x20\x02(\x0cR\x08g\
+    asLimit\x12\x10\n\x02to\x18\x06\x20\x01(\t:\0R\x02to\x12\x14\n\x05value\
+    \x18\x07\x20\x02(\x0cR\x05value\x12.\n\x12data_initial_chunk\x18\x08\x20\
+    \x01(\x0c:\0R\x10dataInitialChunk\x12\x1f\n\x0bdata_length\x18\t\x20\x02\
+    (\rR\ndataLength\x12\x19\n\x08chain_id\x18\n\x20\x02(\x04R\x07chainId\
+    \x12f\n\x0baccess_list\x18\x0b\x20\x03(\x0b2E.hw.trezor.messages.ethereu\
+    m.EthereumSignTxEIP1559.EthereumAccessListR\naccessList\x1aQ\n\x12Ethere\
+    umAccessList\x12\x18\n\x07address\x18\x01\x20\x02(\tR\x07address\x12!\n\
+    \x0cstorage_keys\x18\x02\x20\x03(\x0cR\x0bstorageKeys\"\x97\x01\n\x11Eth\
+    ereumTxRequest\x12\x1f\n\x0bdata_length\x18\x01\x20\x01(\rR\ndataLength\
+    \x12\x1f\n\x0bsignature_v\x18\x02\x20\x01(\rR\nsignatureV\x12\x1f\n\x0bs\
+    ignature_r\x18\x03\x20\x01(\x0cR\nsignatureR\x12\x1f\n\x0bsignature_s\
+    \x18\x04\x20\x01(\x0cR\nsignatureS\".\n\rEthereumTxAck\x12\x1d\n\ndata_c\
+    hunk\x18\x01\x20\x02(\x0cR\tdataChunk\"L\n\x13EthereumSignMessage\x12\
+    \x1b\n\taddress_n\x18\x01\x20\x03(\rR\x08addressN\x12\x18\n\x07message\
+    \x18\x02\x20\x02(\x0cR\x07message\"R\n\x18EthereumMessageSignature\x12\
+    \x1c\n\tsignature\x18\x02\x20\x02(\x0cR\tsignature\x12\x18\n\x07address\
+    \x18\x03\x20\x02(\tR\x07address\"i\n\x15EthereumVerifyMessage\x12\x1c\n\
+    \tsignature\x18\x02\x20\x02(\x0cR\tsignature\x12\x18\n\x07message\x18\
+    \x03\x20\x02(\x0cR\x07message\x12\x18\n\x07address\x18\x04\x20\x02(\tR\
+    \x07addressB<\n#com.satoshilabs.trezor.lib.protobufB\x15TrezorMessageEth\
+    ereumJ\xa34\n\x07\x12\x05\0\0\x96\x01\x01\n\x08\n\x01\x0c\x12\x03\0\0\
     \x12\n\x08\n\x01\x02\x12\x03\x01\0$\n\x08\n\x01\x08\x12\x03\x04\0<\n.\n\
     \x02\x08\x01\x12\x03\x04\0<\x1a#\x20Sugar\x20for\x20easier\x20handling\
     \x20in\x20Java\n\n\x08\n\x01\x08\x12\x03\x05\06\n\t\n\x02\x08\x08\x12\
-    \x03\x05\06\n\x86\x01\n\x02\x04\0\x12\x04\r\0\x10\x01\x1az*\n\x20Request\
-    :\x20Ask\x20device\x20for\x20Ethereum\x20address\x20corresponding\x20to\
-    \x20address_n\x20path\n\x20@start\n\x20@next\x20EthereumAddress\n\x20@ne\
-    xt\x20Failure\n\n\n\n\x03\x04\0\x01\x12\x03\r\x08\x1a\n=\n\x04\x04\0\x02\
-    \0\x12\x03\x0e\x04\"\"0\x20BIP-32\x20path\x20to\x20derive\x20the\x20key\
-    \x20from\x20master\x20node\n\n\x0c\n\x05\x04\0\x02\0\x04\x12\x03\x0e\x04\
-    \x0c\n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\x0e\r\x13\n\x0c\n\x05\x04\0\x02\
-    \0\x01\x12\x03\x0e\x14\x1d\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\x0e\x20!\
-    \nC\n\x04\x04\0\x02\x01\x12\x03\x0f\x04#\"6\x20optionally\x20show\x20on\
-    \x20display\x20before\x20sending\x20the\x20result\n\n\x0c\n\x05\x04\0\
-    \x02\x01\x04\x12\x03\x0f\x04\x0c\n\x0c\n\x05\x04\0\x02\x01\x05\x12\x03\
-    \x0f\r\x11\n\x0c\n\x05\x04\0\x02\x01\x01\x12\x03\x0f\x12\x1e\n\x0c\n\x05\
-    \x04\0\x02\x01\x03\x12\x03\x0f!\"\n]\n\x02\x04\x01\x12\x04\x16\0\x18\x01\
-    \x1aQ*\n\x20Response:\x20Contains\x20an\x20Ethereum\x20address\x20derive\
-    d\x20from\x20device\x20private\x20seed\n\x20@end\n\n\n\n\x03\x04\x01\x01\
-    \x12\x03\x16\x08\x17\n7\n\x04\x04\x01\x02\0\x12\x03\x17\x04\x1f\"*\x20Co\
-    in\x20address\x20as\x20an\x20Ethereum\x20160\x20bit\x20hash\n\n\x0c\n\
-    \x05\x04\x01\x02\0\x04\x12\x03\x17\x04\x0c\n\x0c\n\x05\x04\x01\x02\0\x05\
-    \x12\x03\x17\r\x12\n\x0c\n\x05\x04\x01\x02\0\x01\x12\x03\x17\x13\x1a\n\
-    \x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x17\x1d\x1e\n\xaa\x02\n\x02\x04\x02\
-    \x12\x04\"\0-\x01\x1a\x9d\x02*\n\x20Request:\x20Ask\x20device\x20to\x20s\
-    ign\x20transaction\n\x20All\x20fields\x20are\x20optional\x20from\x20the\
-    \x20protocol's\x20point\x20of\x20view.\x20Each\x20field\x20defaults\x20t\
-    o\x20value\x20`0`\x20if\x20missing.\n\x20Note:\x20the\x20first\x20at\x20\
-    most\x201024\x20bytes\x20of\x20data\x20MUST\x20be\x20transmitted\x20as\
-    \x20part\x20of\x20this\x20message.\n\x20@start\n\x20@next\x20EthereumTxR\
-    equest\n\x20@next\x20Failure\n\n\n\n\x03\x04\x02\x01\x12\x03\"\x08\x16\n\
-    =\n\x04\x04\x02\x02\0\x12\x03#\x04\"\"0\x20BIP-32\x20path\x20to\x20deriv\
-    e\x20the\x20key\x20from\x20master\x20node\n\n\x0c\n\x05\x04\x02\x02\0\
-    \x04\x12\x03#\x04\x0c\n\x0c\n\x05\x04\x02\x02\0\x05\x12\x03#\r\x13\n\x0c\
-    \n\x05\x04\x02\x02\0\x01\x12\x03#\x14\x1d\n\x0c\n\x05\x04\x02\x02\0\x03\
-    \x12\x03#\x20!\n,\n\x04\x04\x02\x02\x01\x12\x03$\x04\x1d\"\x1f\x20<=256\
-    \x20bit\x20unsigned\x20big\x20endian\n\n\x0c\n\x05\x04\x02\x02\x01\x04\
-    \x12\x03$\x04\x0c\n\x0c\n\x05\x04\x02\x02\x01\x05\x12\x03$\r\x12\n\x0c\n\
-    \x05\x04\x02\x02\x01\x01\x12\x03$\x13\x18\n\x0c\n\x05\x04\x02\x02\x01\
-    \x03\x12\x03$\x1b\x1c\n5\n\x04\x04\x02\x02\x02\x12\x03%\x04!\"(\x20<=256\
-    \x20bit\x20unsigned\x20big\x20endian\x20(in\x20wei)\n\n\x0c\n\x05\x04\
-    \x02\x02\x02\x04\x12\x03%\x04\x0c\n\x0c\n\x05\x04\x02\x02\x02\x05\x12\
-    \x03%\r\x12\n\x0c\n\x05\x04\x02\x02\x02\x01\x12\x03%\x13\x1c\n\x0c\n\x05\
-    \x04\x02\x02\x02\x03\x12\x03%\x1f\x20\n,\n\x04\x04\x02\x02\x03\x12\x03&\
-    \x04!\"\x1f\x20<=256\x20bit\x20unsigned\x20big\x20endian\n\n\x0c\n\x05\
-    \x04\x02\x02\x03\x04\x12\x03&\x04\x0c\n\x0c\n\x05\x04\x02\x02\x03\x05\
-    \x12\x03&\r\x12\n\x0c\n\x05\x04\x02\x02\x03\x01\x12\x03&\x13\x1c\n\x0c\n\
-    \x05\x04\x02\x02\x03\x03\x12\x03&\x1f\x20\n#\n\x04\x04\x02\x02\x04\x12\
-    \x03'\x04\x1a\"\x16\x20160\x20bit\x20address\x20hash\n\n\x0c\n\x05\x04\
-    \x02\x02\x04\x04\x12\x03'\x04\x0c\n\x0c\n\x05\x04\x02\x02\x04\x05\x12\
-    \x03'\r\x12\n\x0c\n\x05\x04\x02\x02\x04\x01\x12\x03'\x13\x15\n\x0c\n\x05\
-    \x04\x02\x02\x04\x03\x12\x03'\x18\x19\n5\n\x04\x04\x02\x02\x05\x12\x03(\
-    \x04\x1d\"(\x20<=256\x20bit\x20unsigned\x20big\x20endian\x20(in\x20wei)\
-    \n\n\x0c\n\x05\x04\x02\x02\x05\x04\x12\x03(\x04\x0c\n\x0c\n\x05\x04\x02\
-    \x02\x05\x05\x12\x03(\r\x12\n\x0c\n\x05\x04\x02\x02\x05\x01\x12\x03(\x13\
-    \x18\n\x0c\n\x05\x04\x02\x02\x05\x03\x12\x03(\x1b\x1c\n5\n\x04\x04\x02\
-    \x02\x06\x12\x03)\x04*\"(\x20The\x20initial\x20data\x20chunk\x20(<=\x201\
-    024\x20bytes)\n\n\x0c\n\x05\x04\x02\x02\x06\x04\x12\x03)\x04\x0c\n\x0c\n\
-    \x05\x04\x02\x02\x06\x05\x12\x03)\r\x12\n\x0c\n\x05\x04\x02\x02\x06\x01\
-    \x12\x03)\x13%\n\x0c\n\x05\x04\x02\x02\x06\x03\x12\x03)()\n,\n\x04\x04\
-    \x02\x02\x07\x12\x03*\x04$\"\x1f\x20Length\x20of\x20transaction\x20paylo\
-    ad\n\n\x0c\n\x05\x04\x02\x02\x07\x04\x12\x03*\x04\x0c\n\x0c\n\x05\x04\
-    \x02\x02\x07\x05\x12\x03*\r\x13\n\x0c\n\x05\x04\x02\x02\x07\x01\x12\x03*\
-    \x14\x1f\n\x0c\n\x05\x04\x02\x02\x07\x03\x12\x03*\"#\n#\n\x04\x04\x02\
-    \x02\x08\x12\x03+\x04!\"\x16\x20Chain\x20Id\x20for\x20EIP\x20155\n\n\x0c\
-    \n\x05\x04\x02\x02\x08\x04\x12\x03+\x04\x0c\n\x0c\n\x05\x04\x02\x02\x08\
-    \x05\x12\x03+\r\x13\n\x0c\n\x05\x04\x02\x02\x08\x01\x12\x03+\x14\x1c\n\
-    \x0c\n\x05\x04\x02\x02\x08\x03\x12\x03+\x1f\x20\n\"\n\x04\x04\x02\x02\t\
-    \x12\x03,\x04!\"\x15\x20(only\x20for\x20Wanchain)\n\n\x0c\n\x05\x04\x02\
-    \x02\t\x04\x12\x03,\x04\x0c\n\x0c\n\x05\x04\x02\x02\t\x05\x12\x03,\r\x13\
-    \n\x0c\n\x05\x04\x02\x02\t\x01\x12\x03,\x14\x1b\n\x0c\n\x05\x04\x02\x02\
-    \t\x03\x12\x03,\x1e\x20\n\xc9\x01\n\x02\x04\x03\x12\x046\0G\x01\x1a\xbc\
-    \x01*\n\x20Request:\x20Ask\x20device\x20to\x20sign\x20EIP1559\x20transac\
-    tion\n\x20Note:\x20the\x20first\x20at\x20most\x201024\x20bytes\x20of\x20\
-    data\x20MUST\x20be\x20transmitted\x20as\x20part\x20of\x20this\x20message\
-    .\n\x20@start\n\x20@next\x20EthereumTxRequest\n\x20@next\x20Failure\n\n\
-    \n\n\x03\x04\x03\x01\x12\x036\x08\x1d\n=\n\x04\x04\x03\x02\0\x12\x037\
-    \x04\"\"0\x20BIP-32\x20path\x20to\x20derive\x20the\x20key\x20from\x20mas\
-    ter\x20node\n\n\x0c\n\x05\x04\x03\x02\0\x04\x12\x037\x04\x0c\n\x0c\n\x05\
-    \x04\x03\x02\0\x05\x12\x037\r\x13\n\x0c\n\x05\x04\x03\x02\0\x01\x12\x037\
-    \x14\x1d\n\x0c\n\x05\x04\x03\x02\0\x03\x12\x037\x20!\n,\n\x04\x04\x03\
-    \x02\x01\x12\x038\x04\x1d\"\x1f\x20<=256\x20bit\x20unsigned\x20big\x20en\
-    dian\n\n\x0c\n\x05\x04\x03\x02\x01\x04\x12\x038\x04\x0c\n\x0c\n\x05\x04\
-    \x03\x02\x01\x05\x12\x038\r\x12\n\x0c\n\x05\x04\x03\x02\x01\x01\x12\x038\
-    \x13\x18\n\x0c\n\x05\x04\x03\x02\x01\x03\x12\x038\x1b\x1c\n5\n\x04\x04\
-    \x03\x02\x02\x12\x039\x04#\"(\x20<=256\x20bit\x20unsigned\x20big\x20endi\
-    an\x20(in\x20wei)\n\n\x0c\n\x05\x04\x03\x02\x02\x04\x12\x039\x04\x0c\n\
-    \x0c\n\x05\x04\x03\x02\x02\x05\x12\x039\r\x12\n\x0c\n\x05\x04\x03\x02\
-    \x02\x01\x12\x039\x13\x1e\n\x0c\n\x05\x04\x03\x02\x02\x03\x12\x039!\"\n5\
-    \n\x04\x04\x03\x02\x03\x12\x03:\x04(\"(\x20<=256\x20bit\x20unsigned\x20b\
-    ig\x20endian\x20(in\x20wei)\n\n\x0c\n\x05\x04\x03\x02\x03\x04\x12\x03:\
-    \x04\x0c\n\x0c\n\x05\x04\x03\x02\x03\x05\x12\x03:\r\x12\n\x0c\n\x05\x04\
-    \x03\x02\x03\x01\x12\x03:\x13#\n\x0c\n\x05\x04\x03\x02\x03\x03\x12\x03:&\
-    '\n,\n\x04\x04\x03\x02\x04\x12\x03;\x04!\"\x1f\x20<=256\x20bit\x20unsign\
-    ed\x20big\x20endian\n\n\x0c\n\x05\x04\x03\x02\x04\x04\x12\x03;\x04\x0c\n\
-    \x0c\n\x05\x04\x03\x02\x04\x05\x12\x03;\r\x12\n\x0c\n\x05\x04\x03\x02\
-    \x04\x01\x12\x03;\x13\x1c\n\x0c\n\x05\x04\x03\x02\x04\x03\x12\x03;\x1f\
-    \x20\n\x20\n\x04\x04\x03\x02\x05\x12\x03<\x04(\"\x13\x20recipient\x20add\
-    ress\n\n\x0c\n\x05\x04\x03\x02\x05\x04\x12\x03<\x04\x0c\n\x0c\n\x05\x04\
-    \x03\x02\x05\x05\x12\x03<\r\x13\n\x0c\n\x05\x04\x03\x02\x05\x01\x12\x03<\
-    \x14\x16\n\x0c\n\x05\x04\x03\x02\x05\x03\x12\x03<\x19\x1a\n\x0c\n\x05\
-    \x04\x03\x02\x05\x08\x12\x03<\x1b'\n\x0c\n\x05\x04\x03\x02\x05\x07\x12\
-    \x03<$&\n5\n\x04\x04\x03\x02\x06\x12\x03=\x04\x1d\"(\x20<=256\x20bit\x20\
-    unsigned\x20big\x20endian\x20(in\x20wei)\n\n\x0c\n\x05\x04\x03\x02\x06\
-    \x04\x12\x03=\x04\x0c\n\x0c\n\x05\x04\x03\x02\x06\x05\x12\x03=\r\x12\n\
-    \x0c\n\x05\x04\x03\x02\x06\x01\x12\x03=\x13\x18\n\x0c\n\x05\x04\x03\x02\
-    \x06\x03\x12\x03=\x1b\x1c\n5\n\x04\x04\x03\x02\x07\x12\x03>\x047\"(\x20T\
-    he\x20initial\x20data\x20chunk\x20(<=\x201024\x20bytes)\n\n\x0c\n\x05\
-    \x04\x03\x02\x07\x04\x12\x03>\x04\x0c\n\x0c\n\x05\x04\x03\x02\x07\x05\
-    \x12\x03>\r\x12\n\x0c\n\x05\x04\x03\x02\x07\x01\x12\x03>\x13%\n\x0c\n\
-    \x05\x04\x03\x02\x07\x03\x12\x03>()\n\x0c\n\x05\x04\x03\x02\x07\x08\x12\
-    \x03>*6\n\x0c\n\x05\x04\x03\x02\x07\x07\x12\x03>35\n,\n\x04\x04\x03\x02\
-    \x08\x12\x03?\x04$\"\x1f\x20Length\x20of\x20transaction\x20payload\n\n\
-    \x0c\n\x05\x04\x03\x02\x08\x04\x12\x03?\x04\x0c\n\x0c\n\x05\x04\x03\x02\
-    \x08\x05\x12\x03?\r\x13\n\x0c\n\x05\x04\x03\x02\x08\x01\x12\x03?\x14\x1f\
-    \n\x0c\n\x05\x04\x03\x02\x08\x03\x12\x03?\"#\n#\n\x04\x04\x03\x02\t\x12\
-    \x03@\x04\"\"\x16\x20Chain\x20Id\x20for\x20EIP\x20155\n\n\x0c\n\x05\x04\
-    \x03\x02\t\x04\x12\x03@\x04\x0c\n\x0c\n\x05\x04\x03\x02\t\x05\x12\x03@\r\
-    \x13\n\x0c\n\x05\x04\x03\x02\t\x01\x12\x03@\x14\x1c\n\x0c\n\x05\x04\x03\
-    \x02\t\x03\x12\x03@\x1f!\n\x1a\n\x04\x04\x03\x02\n\x12\x03A\x041\"\r\x20\
-    Access\x20List\n\n\x0c\n\x05\x04\x03\x02\n\x04\x12\x03A\x04\x0c\n\x0c\n\
-    \x05\x04\x03\x02\n\x06\x12\x03A\r\x1f\n\x0c\n\x05\x04\x03\x02\n\x01\x12\
-    \x03A\x20+\n\x0c\n\x05\x04\x03\x02\n\x03\x12\x03A.0\n\x0c\n\x04\x04\x03\
-    \x03\0\x12\x04C\x04F\x05\n\x0c\n\x05\x04\x03\x03\0\x01\x12\x03C\x0c\x1e\
-    \n\r\n\x06\x04\x03\x03\0\x02\0\x12\x03D\x08$\n\x0e\n\x07\x04\x03\x03\0\
-    \x02\0\x04\x12\x03D\x08\x10\n\x0e\n\x07\x04\x03\x03\0\x02\0\x05\x12\x03D\
-    \x11\x17\n\x0e\n\x07\x04\x03\x03\0\x02\0\x01\x12\x03D\x18\x1f\n\x0e\n\
-    \x07\x04\x03\x03\0\x02\0\x03\x12\x03D\"#\n\r\n\x06\x04\x03\x03\0\x02\x01\
-    \x12\x03E\x08(\n\x0e\n\x07\x04\x03\x03\0\x02\x01\x04\x12\x03E\x08\x10\n\
-    \x0e\n\x07\x04\x03\x03\0\x02\x01\x05\x12\x03E\x11\x16\n\x0e\n\x07\x04\
-    \x03\x03\0\x02\x01\x01\x12\x03E\x17#\n\x0e\n\x07\x04\x03\x03\0\x02\x01\
-    \x03\x12\x03E&'\n\xbb\x02\n\x02\x04\x04\x12\x04P\0U\x01\x1a\xae\x02*\n\
-    \x20Response:\x20Device\x20asks\x20for\x20more\x20data\x20from\x20transa\
-    ction\x20payload,\x20or\x20returns\x20the\x20signature.\n\x20If\x20data_\
-    length\x20is\x20set,\x20device\x20awaits\x20that\x20many\x20more\x20byte\
-    s\x20of\x20payload.\n\x20Otherwise,\x20the\x20signature_*\x20fields\x20c\
-    ontain\x20the\x20computed\x20transaction\x20signature.\x20All\x20three\
-    \x20fields\x20will\x20be\x20present.\n\x20@end\n\x20@next\x20EthereumTxA\
-    ck\n\n\n\n\x03\x04\x04\x01\x12\x03P\x08\x19\n8\n\x04\x04\x04\x02\0\x12\
-    \x03Q\x04$\"+\x20Number\x20of\x20bytes\x20being\x20requested\x20(<=\x201\
-    024)\n\n\x0c\n\x05\x04\x04\x02\0\x04\x12\x03Q\x04\x0c\n\x0c\n\x05\x04\
-    \x04\x02\0\x05\x12\x03Q\r\x13\n\x0c\n\x05\x04\x04\x02\0\x01\x12\x03Q\x14\
-    \x1f\n\x0c\n\x05\x04\x04\x02\0\x03\x12\x03Q\"#\nK\n\x04\x04\x04\x02\x01\
-    \x12\x03R\x04$\">\x20Computed\x20signature\x20(recovery\x20parameter,\
-    \x20limited\x20to\x2027\x20or\x2028)\n\n\x0c\n\x05\x04\x04\x02\x01\x04\
-    \x12\x03R\x04\x0c\n\x0c\n\x05\x04\x04\x02\x01\x05\x12\x03R\r\x13\n\x0c\n\
-    \x05\x04\x04\x02\x01\x01\x12\x03R\x14\x1f\n\x0c\n\x05\x04\x04\x02\x01\
-    \x03\x12\x03R\"#\n7\n\x04\x04\x04\x02\x02\x12\x03S\x04#\"*\x20Computed\
-    \x20signature\x20R\x20component\x20(256\x20bit)\n\n\x0c\n\x05\x04\x04\
-    \x02\x02\x04\x12\x03S\x04\x0c\n\x0c\n\x05\x04\x04\x02\x02\x05\x12\x03S\r\
-    \x12\n\x0c\n\x05\x04\x04\x02\x02\x01\x12\x03S\x13\x1e\n\x0c\n\x05\x04\
-    \x04\x02\x02\x03\x12\x03S!\"\n7\n\x04\x04\x04\x02\x03\x12\x03T\x04#\"*\
-    \x20Computed\x20signature\x20S\x20component\x20(256\x20bit)\n\n\x0c\n\
-    \x05\x04\x04\x02\x03\x04\x12\x03T\x04\x0c\n\x0c\n\x05\x04\x04\x02\x03\
-    \x05\x12\x03T\r\x12\n\x0c\n\x05\x04\x04\x02\x03\x01\x12\x03T\x13\x1e\n\
-    \x0c\n\x05\x04\x04\x02\x03\x03\x12\x03T!\"\nK\n\x02\x04\x05\x12\x04[\0]\
-    \x01\x1a?*\n\x20Request:\x20Transaction\x20payload\x20data.\n\x20@next\
-    \x20EthereumTxRequest\n\n\n\n\x03\x04\x05\x01\x12\x03[\x08\x15\n=\n\x04\
-    \x04\x05\x02\0\x12\x03\\\x04\"\"0\x20Bytes\x20from\x20transaction\x20pay\
-    load\x20(<=\x201024\x20bytes)\n\n\x0c\n\x05\x04\x05\x02\0\x04\x12\x03\\\
-    \x04\x0c\n\x0c\n\x05\x04\x05\x02\0\x05\x12\x03\\\r\x12\n\x0c\n\x05\x04\
-    \x05\x02\0\x01\x12\x03\\\x13\x1d\n\x0c\n\x05\x04\x05\x02\0\x03\x12\x03\\\
-    \x20!\nj\n\x02\x04\x06\x12\x04e\0h\x01\x1a^*\n\x20Request:\x20Ask\x20dev\
-    ice\x20to\x20sign\x20message\n\x20@start\n\x20@next\x20EthereumMessageSi\
-    gnature\n\x20@next\x20Failure\n\n\n\n\x03\x04\x06\x01\x12\x03e\x08\x1b\n\
-    =\n\x04\x04\x06\x02\0\x12\x03f\x04\"\"0\x20BIP-32\x20path\x20to\x20deriv\
-    e\x20the\x20key\x20from\x20master\x20node\n\n\x0c\n\x05\x04\x06\x02\0\
-    \x04\x12\x03f\x04\x0c\n\x0c\n\x05\x04\x06\x02\0\x05\x12\x03f\r\x13\n\x0c\
-    \n\x05\x04\x06\x02\0\x01\x12\x03f\x14\x1d\n\x0c\n\x05\x04\x06\x02\0\x03\
-    \x12\x03f\x20!\n#\n\x04\x04\x06\x02\x01\x12\x03g\x04\x1f\"\x16\x20messag\
-    e\x20to\x20be\x20signed\n\n\x0c\n\x05\x04\x06\x02\x01\x04\x12\x03g\x04\
-    \x0c\n\x0c\n\x05\x04\x06\x02\x01\x05\x12\x03g\r\x12\n\x0c\n\x05\x04\x06\
-    \x02\x01\x01\x12\x03g\x13\x1a\n\x0c\n\x05\x04\x06\x02\x01\x03\x12\x03g\
-    \x1d\x1e\n.\n\x02\x04\x07\x12\x04n\0q\x01\x1a\"*\n\x20Response:\x20Signe\
-    d\x20message\n\x20@end\n\n\n\n\x03\x04\x07\x01\x12\x03n\x08\x20\n/\n\x04\
-    \x04\x07\x02\0\x12\x03o\x04\x1f\"\"\x20address\x20used\x20to\x20sign\x20\
-    the\x20message\n\n\x0c\n\x05\x04\x07\x02\0\x04\x12\x03o\x04\x0c\n\x0c\n\
-    \x05\x04\x07\x02\0\x05\x12\x03o\r\x12\n\x0c\n\x05\x04\x07\x02\0\x01\x12\
-    \x03o\x13\x1a\n\x0c\n\x05\x04\x07\x02\0\x03\x12\x03o\x1d\x1e\n'\n\x04\
-    \x04\x07\x02\x01\x12\x03p\x04!\"\x1a\x20signature\x20of\x20the\x20messag\
-    e\n\n\x0c\n\x05\x04\x07\x02\x01\x04\x12\x03p\x04\x0c\n\x0c\n\x05\x04\x07\
-    \x02\x01\x05\x12\x03p\r\x12\n\x0c\n\x05\x04\x07\x02\x01\x01\x12\x03p\x13\
-    \x1c\n\x0c\n\x05\x04\x07\x02\x01\x03\x12\x03p\x1f\x20\n[\n\x02\x04\x08\
-    \x12\x04y\0}\x01\x1aO*\n\x20Request:\x20Ask\x20device\x20to\x20verify\
-    \x20message\n\x20@start\n\x20@next\x20Success\n\x20@next\x20Failure\n\n\
-    \n\n\x03\x04\x08\x01\x12\x03y\x08\x1d\n\x20\n\x04\x04\x08\x02\0\x12\x03z\
-    \x04\x1f\"\x13\x20address\x20to\x20verify\n\n\x0c\n\x05\x04\x08\x02\0\
-    \x04\x12\x03z\x04\x0c\n\x0c\n\x05\x04\x08\x02\0\x05\x12\x03z\r\x12\n\x0c\
-    \n\x05\x04\x08\x02\0\x01\x12\x03z\x13\x1a\n\x0c\n\x05\x04\x08\x02\0\x03\
-    \x12\x03z\x1d\x1e\n\"\n\x04\x04\x08\x02\x01\x12\x03{\x04!\"\x15\x20signa\
-    ture\x20to\x20verify\n\n\x0c\n\x05\x04\x08\x02\x01\x04\x12\x03{\x04\x0c\
-    \n\x0c\n\x05\x04\x08\x02\x01\x05\x12\x03{\r\x12\n\x0c\n\x05\x04\x08\x02\
-    \x01\x01\x12\x03{\x13\x1c\n\x0c\n\x05\x04\x08\x02\x01\x03\x12\x03{\x1f\
-    \x20\n\x20\n\x04\x04\x08\x02\x02\x12\x03|\x04\x1f\"\x13\x20message\x20to\
-    \x20verify\n\n\x0c\n\x05\x04\x08\x02\x02\x04\x12\x03|\x04\x0c\n\x0c\n\
-    \x05\x04\x08\x02\x02\x05\x12\x03|\r\x12\n\x0c\n\x05\x04\x08\x02\x02\x01\
-    \x12\x03|\x13\x1a\n\x0c\n\x05\x04\x08\x02\x02\x03\x12\x03|\x1d\x1e\
+    \x03\x05\06\n\t\n\x02\x03\0\x12\x03\x07\0\x1f\n\x82\x01\n\x02\x04\0\x12\
+    \x04\x10\0\x13\x01\x1av*\n\x20Request:\x20Ask\x20device\x20for\x20public\
+    \x20key\x20corresponding\x20to\x20address_n\x20path\n\x20@start\n\x20@ne\
+    xt\x20EthereumPublicKey\n\x20@next\x20Failure\n\n\n\n\x03\x04\0\x01\x12\
+    \x03\x10\x08\x1c\n=\n\x04\x04\0\x02\0\x12\x03\x11\x04\"\"0\x20BIP-32\x20\
+    path\x20to\x20derive\x20the\x20key\x20from\x20master\x20node\n\n\x0c\n\
+    \x05\x04\0\x02\0\x04\x12\x03\x11\x04\x0c\n\x0c\n\x05\x04\0\x02\0\x05\x12\
+    \x03\x11\r\x13\n\x0c\n\x05\x04\0\x02\0\x01\x12\x03\x11\x14\x1d\n\x0c\n\
+    \x05\x04\0\x02\0\x03\x12\x03\x11\x20!\nC\n\x04\x04\0\x02\x01\x12\x03\x12\
+    \x04#\"6\x20optionally\x20show\x20on\x20display\x20before\x20sending\x20\
+    the\x20result\n\n\x0c\n\x05\x04\0\x02\x01\x04\x12\x03\x12\x04\x0c\n\x0c\
+    \n\x05\x04\0\x02\x01\x05\x12\x03\x12\r\x11\n\x0c\n\x05\x04\0\x02\x01\x01\
+    \x12\x03\x12\x12\x1e\n\x0c\n\x05\x04\0\x02\x01\x03\x12\x03\x12!\"\nT\n\
+    \x02\x04\x01\x12\x04\x19\0\x1c\x01\x1aH*\n\x20Response:\x20Contains\x20p\
+    ublic\x20key\x20derived\x20from\x20device\x20private\x20seed\n\x20@end\n\
+    \n\n\n\x03\x04\x01\x01\x12\x03\x19\x08\x19\n\x20\n\x04\x04\x01\x02\0\x12\
+    \x03\x1a\x04;\"\x13\x20BIP32\x20public\x20node\n\n\x0c\n\x05\x04\x01\x02\
+    \0\x04\x12\x03\x1a\x04\x0c\n\x0c\n\x05\x04\x01\x02\0\x06\x12\x03\x1a\r1\
+    \n\x0c\n\x05\x04\x01\x02\0\x01\x12\x03\x1a26\n\x0c\n\x05\x04\x01\x02\0\
+    \x03\x12\x03\x1a9:\n-\n\x04\x04\x01\x02\x01\x12\x03\x1b\x04\x1d\"\x20\
+    \x20serialized\x20form\x20of\x20public\x20node\n\n\x0c\n\x05\x04\x01\x02\
+    \x01\x04\x12\x03\x1b\x04\x0c\n\x0c\n\x05\x04\x01\x02\x01\x05\x12\x03\x1b\
+    \r\x13\n\x0c\n\x05\x04\x01\x02\x01\x01\x12\x03\x1b\x14\x18\n\x0c\n\x05\
+    \x04\x01\x02\x01\x03\x12\x03\x1b\x1b\x1c\n\x86\x01\n\x02\x04\x02\x12\x04\
+    $\0'\x01\x1az*\n\x20Request:\x20Ask\x20device\x20for\x20Ethereum\x20addr\
+    ess\x20corresponding\x20to\x20address_n\x20path\n\x20@start\n\x20@next\
+    \x20EthereumAddress\n\x20@next\x20Failure\n\n\n\n\x03\x04\x02\x01\x12\
+    \x03$\x08\x1a\n=\n\x04\x04\x02\x02\0\x12\x03%\x04\"\"0\x20BIP-32\x20path\
+    \x20to\x20derive\x20the\x20key\x20from\x20master\x20node\n\n\x0c\n\x05\
+    \x04\x02\x02\0\x04\x12\x03%\x04\x0c\n\x0c\n\x05\x04\x02\x02\0\x05\x12\
+    \x03%\r\x13\n\x0c\n\x05\x04\x02\x02\0\x01\x12\x03%\x14\x1d\n\x0c\n\x05\
+    \x04\x02\x02\0\x03\x12\x03%\x20!\nC\n\x04\x04\x02\x02\x01\x12\x03&\x04#\
+    \"6\x20optionally\x20show\x20on\x20display\x20before\x20sending\x20the\
+    \x20result\n\n\x0c\n\x05\x04\x02\x02\x01\x04\x12\x03&\x04\x0c\n\x0c\n\
+    \x05\x04\x02\x02\x01\x05\x12\x03&\r\x11\n\x0c\n\x05\x04\x02\x02\x01\x01\
+    \x12\x03&\x12\x1e\n\x0c\n\x05\x04\x02\x02\x01\x03\x12\x03&!\"\n]\n\x02\
+    \x04\x03\x12\x04-\00\x01\x1aQ*\n\x20Response:\x20Contains\x20an\x20Ether\
+    eum\x20address\x20derived\x20from\x20device\x20private\x20seed\n\x20@end\
+    \n\n\n\n\x03\x04\x03\x01\x12\x03-\x08\x17\nD\n\x04\x04\x03\x02\0\x12\x03\
+    .\x046\"7\x20trezor\x20<1.8.0,\x20<2.1.0\x20-\x20raw\x20bytes\x20of\x20E\
+    thereum\x20address\n\n\x0c\n\x05\x04\x03\x02\0\x04\x12\x03.\x04\x0c\n\
+    \x0c\n\x05\x04\x03\x02\0\x05\x12\x03.\r\x12\n\x0c\n\x05\x04\x03\x02\0\
+    \x01\x12\x03.\x13\x1f\n\x0c\n\x05\x04\x03\x02\0\x03\x12\x03.\"#\n\x0c\n\
+    \x05\x04\x03\x02\0\x08\x12\x03.$5\n\r\n\x06\x04\x03\x02\0\x08\x03\x12\
+    \x03.%4\n5\n\x04\x04\x03\x02\x01\x12\x03/\x04\x20\"(\x20Ethereum\x20addr\
+    ess\x20as\x20hex-encoded\x20string\n\n\x0c\n\x05\x04\x03\x02\x01\x04\x12\
+    \x03/\x04\x0c\n\x0c\n\x05\x04\x03\x02\x01\x05\x12\x03/\r\x13\n\x0c\n\x05\
+    \x04\x03\x02\x01\x01\x12\x03/\x14\x1b\n\x0c\n\x05\x04\x03\x02\x01\x03\
+    \x12\x03/\x1e\x1f\n\xc7\x02\n\x02\x04\x04\x12\x04;\0F\x01\x1a\xba\x02*\n\
+    \x20Request:\x20Ask\x20device\x20to\x20sign\x20transaction\n\x20gas_pric\
+    e,\x20gas_limit\x20and\x20chain_id\x20must\x20be\x20provided\x20and\x20n\
+    on-zero.\n\x20All\x20other\x20fields\x20are\x20optional\x20and\x20defaul\
+    t\x20to\x20value\x20`0`\x20if\x20missing.\n\x20Note:\x20the\x20first\x20\
+    at\x20most\x201024\x20bytes\x20of\x20data\x20MUST\x20be\x20transmitted\
+    \x20as\x20part\x20of\x20this\x20message.\n\x20@start\n\x20@next\x20Ether\
+    eumTxRequest\n\x20@next\x20Failure\n\n\n\n\x03\x04\x04\x01\x12\x03;\x08\
+    \x16\n=\n\x04\x04\x04\x02\0\x12\x03<\x04\"\"0\x20BIP-32\x20path\x20to\
+    \x20derive\x20the\x20key\x20from\x20master\x20node\n\n\x0c\n\x05\x04\x04\
+    \x02\0\x04\x12\x03<\x04\x0c\n\x0c\n\x05\x04\x04\x02\0\x05\x12\x03<\r\x13\
+    \n\x0c\n\x05\x04\x04\x02\0\x01\x12\x03<\x14\x1d\n\x0c\n\x05\x04\x04\x02\
+    \0\x03\x12\x03<\x20!\n,\n\x04\x04\x04\x02\x01\x12\x03=\x04*\"\x1f\x20<=2\
+    56\x20bit\x20unsigned\x20big\x20endian\n\n\x0c\n\x05\x04\x04\x02\x01\x04\
+    \x12\x03=\x04\x0c\n\x0c\n\x05\x04\x04\x02\x01\x05\x12\x03=\r\x12\n\x0c\n\
+    \x05\x04\x04\x02\x01\x01\x12\x03=\x13\x18\n\x0c\n\x05\x04\x04\x02\x01\
+    \x03\x12\x03=\x1b\x1c\n\x0c\n\x05\x04\x04\x02\x01\x08\x12\x03=\x1d)\n\
+    \x0c\n\x05\x04\x04\x02\x01\x07\x12\x03=&(\n5\n\x04\x04\x04\x02\x02\x12\
+    \x03>\x04!\"(\x20<=256\x20bit\x20unsigned\x20big\x20endian\x20(in\x20wei\
+    )\n\n\x0c\n\x05\x04\x04\x02\x02\x04\x12\x03>\x04\x0c\n\x0c\n\x05\x04\x04\
+    \x02\x02\x05\x12\x03>\r\x12\n\x0c\n\x05\x04\x04\x02\x02\x01\x12\x03>\x13\
+    \x1c\n\x0c\n\x05\x04\x04\x02\x02\x03\x12\x03>\x1f\x20\n,\n\x04\x04\x04\
+    \x02\x03\x12\x03?\x04!\"\x1f\x20<=256\x20bit\x20unsigned\x20big\x20endia\
+    n\n\n\x0c\n\x05\x04\x04\x02\x03\x04\x12\x03?\x04\x0c\n\x0c\n\x05\x04\x04\
+    \x02\x03\x05\x12\x03?\r\x12\n\x0c\n\x05\x04\x04\x02\x03\x01\x12\x03?\x13\
+    \x1c\n\x0c\n\x05\x04\x04\x02\x03\x03\x12\x03?\x1f\x20\n\x20\n\x04\x04\
+    \x04\x02\x04\x12\x03@\x04)\"\x13\x20recipient\x20address\n\n\x0c\n\x05\
+    \x04\x04\x02\x04\x04\x12\x03@\x04\x0c\n\x0c\n\x05\x04\x04\x02\x04\x05\
+    \x12\x03@\r\x13\n\x0c\n\x05\x04\x04\x02\x04\x01\x12\x03@\x14\x16\n\x0c\n\
+    \x05\x04\x04\x02\x04\x03\x12\x03@\x19\x1b\n\x0c\n\x05\x04\x04\x02\x04\
+    \x08\x12\x03@\x1c(\n\x0c\n\x05\x04\x04\x02\x04\x07\x12\x03@%'\n5\n\x04\
+    \x04\x04\x02\x05\x12\x03A\x04*\"(\x20<=256\x20bit\x20unsigned\x20big\x20\
+    endian\x20(in\x20wei)\n\n\x0c\n\x05\x04\x04\x02\x05\x04\x12\x03A\x04\x0c\
+    \n\x0c\n\x05\x04\x04\x02\x05\x05\x12\x03A\r\x12\n\x0c\n\x05\x04\x04\x02\
+    \x05\x01\x12\x03A\x13\x18\n\x0c\n\x05\x04\x04\x02\x05\x03\x12\x03A\x1b\
+    \x1c\n\x0c\n\x05\x04\x04\x02\x05\x08\x12\x03A\x1d)\n\x0c\n\x05\x04\x04\
+    \x02\x05\x07\x12\x03A&(\n5\n\x04\x04\x04\x02\x06\x12\x03B\x047\"(\x20The\
+    \x20initial\x20data\x20chunk\x20(<=\x201024\x20bytes)\n\n\x0c\n\x05\x04\
+    \x04\x02\x06\x04\x12\x03B\x04\x0c\n\x0c\n\x05\x04\x04\x02\x06\x05\x12\
+    \x03B\r\x12\n\x0c\n\x05\x04\x04\x02\x06\x01\x12\x03B\x13%\n\x0c\n\x05\
+    \x04\x04\x02\x06\x03\x12\x03B()\n\x0c\n\x05\x04\x04\x02\x06\x08\x12\x03B\
+    *6\n\x0c\n\x05\x04\x04\x02\x06\x07\x12\x03B35\n,\n\x04\x04\x04\x02\x07\
+    \x12\x03C\x040\"\x1f\x20Length\x20of\x20transaction\x20payload\n\n\x0c\n\
+    \x05\x04\x04\x02\x07\x04\x12\x03C\x04\x0c\n\x0c\n\x05\x04\x04\x02\x07\
+    \x05\x12\x03C\r\x13\n\x0c\n\x05\x04\x04\x02\x07\x01\x12\x03C\x14\x1f\n\
+    \x0c\n\x05\x04\x04\x02\x07\x03\x12\x03C\"#\n\x0c\n\x05\x04\x04\x02\x07\
+    \x08\x12\x03C$/\n\x0c\n\x05\x04\x04\x02\x07\x07\x12\x03C-.\n#\n\x04\x04\
+    \x04\x02\x08\x12\x03D\x04!\"\x16\x20Chain\x20Id\x20for\x20EIP\x20155\n\n\
+    \x0c\n\x05\x04\x04\x02\x08\x04\x12\x03D\x04\x0c\n\x0c\n\x05\x04\x04\x02\
+    \x08\x05\x12\x03D\r\x13\n\x0c\n\x05\x04\x04\x02\x08\x01\x12\x03D\x14\x1c\
+    \n\x0c\n\x05\x04\x04\x02\x08\x03\x12\x03D\x1f\x20\n\x20\n\x04\x04\x04\
+    \x02\t\x12\x03E\x04!\"\x13\x20Used\x20for\x20Wanchain\n\n\x0c\n\x05\x04\
+    \x04\x02\t\x04\x12\x03E\x04\x0c\n\x0c\n\x05\x04\x04\x02\t\x05\x12\x03E\r\
+    \x13\n\x0c\n\x05\x04\x04\x02\t\x01\x12\x03E\x14\x1b\n\x0c\n\x05\x04\x04\
+    \x02\t\x03\x12\x03E\x1e\x20\n\xc9\x01\n\x02\x04\x05\x12\x04O\0`\x01\x1a\
+    \xbc\x01*\n\x20Request:\x20Ask\x20device\x20to\x20sign\x20EIP1559\x20tra\
+    nsaction\n\x20Note:\x20the\x20first\x20at\x20most\x201024\x20bytes\x20of\
+    \x20data\x20MUST\x20be\x20transmitted\x20as\x20part\x20of\x20this\x20mes\
+    sage.\n\x20@start\n\x20@next\x20EthereumTxRequest\n\x20@next\x20Failure\
+    \n\n\n\n\x03\x04\x05\x01\x12\x03O\x08\x1d\n=\n\x04\x04\x05\x02\0\x12\x03\
+    P\x04\"\"0\x20BIP-32\x20path\x20to\x20derive\x20the\x20key\x20from\x20ma\
+    ster\x20node\n\n\x0c\n\x05\x04\x05\x02\0\x04\x12\x03P\x04\x0c\n\x0c\n\
+    \x05\x04\x05\x02\0\x05\x12\x03P\r\x13\n\x0c\n\x05\x04\x05\x02\0\x01\x12\
+    \x03P\x14\x1d\n\x0c\n\x05\x04\x05\x02\0\x03\x12\x03P\x20!\n,\n\x04\x04\
+    \x05\x02\x01\x12\x03Q\x04\x1d\"\x1f\x20<=256\x20bit\x20unsigned\x20big\
+    \x20endian\n\n\x0c\n\x05\x04\x05\x02\x01\x04\x12\x03Q\x04\x0c\n\x0c\n\
+    \x05\x04\x05\x02\x01\x05\x12\x03Q\r\x12\n\x0c\n\x05\x04\x05\x02\x01\x01\
+    \x12\x03Q\x13\x18\n\x0c\n\x05\x04\x05\x02\x01\x03\x12\x03Q\x1b\x1c\n5\n\
+    \x04\x04\x05\x02\x02\x12\x03R\x04#\"(\x20<=256\x20bit\x20unsigned\x20big\
+    \x20endian\x20(in\x20wei)\n\n\x0c\n\x05\x04\x05\x02\x02\x04\x12\x03R\x04\
+    \x0c\n\x0c\n\x05\x04\x05\x02\x02\x05\x12\x03R\r\x12\n\x0c\n\x05\x04\x05\
+    \x02\x02\x01\x12\x03R\x13\x1e\n\x0c\n\x05\x04\x05\x02\x02\x03\x12\x03R!\
+    \"\n5\n\x04\x04\x05\x02\x03\x12\x03S\x04(\"(\x20<=256\x20bit\x20unsigned\
+    \x20big\x20endian\x20(in\x20wei)\n\n\x0c\n\x05\x04\x05\x02\x03\x04\x12\
+    \x03S\x04\x0c\n\x0c\n\x05\x04\x05\x02\x03\x05\x12\x03S\r\x12\n\x0c\n\x05\
+    \x04\x05\x02\x03\x01\x12\x03S\x13#\n\x0c\n\x05\x04\x05\x02\x03\x03\x12\
+    \x03S&'\n,\n\x04\x04\x05\x02\x04\x12\x03T\x04!\"\x1f\x20<=256\x20bit\x20\
+    unsigned\x20big\x20endian\n\n\x0c\n\x05\x04\x05\x02\x04\x04\x12\x03T\x04\
+    \x0c\n\x0c\n\x05\x04\x05\x02\x04\x05\x12\x03T\r\x12\n\x0c\n\x05\x04\x05\
+    \x02\x04\x01\x12\x03T\x13\x1c\n\x0c\n\x05\x04\x05\x02\x04\x03\x12\x03T\
+    \x1f\x20\n\x20\n\x04\x04\x05\x02\x05\x12\x03U\x04(\"\x13\x20recipient\
+    \x20address\n\n\x0c\n\x05\x04\x05\x02\x05\x04\x12\x03U\x04\x0c\n\x0c\n\
+    \x05\x04\x05\x02\x05\x05\x12\x03U\r\x13\n\x0c\n\x05\x04\x05\x02\x05\x01\
+    \x12\x03U\x14\x16\n\x0c\n\x05\x04\x05\x02\x05\x03\x12\x03U\x19\x1a\n\x0c\
+    \n\x05\x04\x05\x02\x05\x08\x12\x03U\x1b'\n\x0c\n\x05\x04\x05\x02\x05\x07\
+    \x12\x03U$&\n5\n\x04\x04\x05\x02\x06\x12\x03V\x04\x1d\"(\x20<=256\x20bit\
+    \x20unsigned\x20big\x20endian\x20(in\x20wei)\n\n\x0c\n\x05\x04\x05\x02\
+    \x06\x04\x12\x03V\x04\x0c\n\x0c\n\x05\x04\x05\x02\x06\x05\x12\x03V\r\x12\
+    \n\x0c\n\x05\x04\x05\x02\x06\x01\x12\x03V\x13\x18\n\x0c\n\x05\x04\x05\
+    \x02\x06\x03\x12\x03V\x1b\x1c\n5\n\x04\x04\x05\x02\x07\x12\x03W\x047\"(\
+    \x20The\x20initial\x20data\x20chunk\x20(<=\x201024\x20bytes)\n\n\x0c\n\
+    \x05\x04\x05\x02\x07\x04\x12\x03W\x04\x0c\n\x0c\n\x05\x04\x05\x02\x07\
+    \x05\x12\x03W\r\x12\n\x0c\n\x05\x04\x05\x02\x07\x01\x12\x03W\x13%\n\x0c\
+    \n\x05\x04\x05\x02\x07\x03\x12\x03W()\n\x0c\n\x05\x04\x05\x02\x07\x08\
+    \x12\x03W*6\n\x0c\n\x05\x04\x05\x02\x07\x07\x12\x03W35\n,\n\x04\x04\x05\
+    \x02\x08\x12\x03X\x04$\"\x1f\x20Length\x20of\x20transaction\x20payload\n\
+    \n\x0c\n\x05\x04\x05\x02\x08\x04\x12\x03X\x04\x0c\n\x0c\n\x05\x04\x05\
+    \x02\x08\x05\x12\x03X\r\x13\n\x0c\n\x05\x04\x05\x02\x08\x01\x12\x03X\x14\
+    \x1f\n\x0c\n\x05\x04\x05\x02\x08\x03\x12\x03X\"#\n#\n\x04\x04\x05\x02\t\
+    \x12\x03Y\x04\"\"\x16\x20Chain\x20Id\x20for\x20EIP\x20155\n\n\x0c\n\x05\
+    \x04\x05\x02\t\x04\x12\x03Y\x04\x0c\n\x0c\n\x05\x04\x05\x02\t\x05\x12\
+    \x03Y\r\x13\n\x0c\n\x05\x04\x05\x02\t\x01\x12\x03Y\x14\x1c\n\x0c\n\x05\
+    \x04\x05\x02\t\x03\x12\x03Y\x1f!\n\x1a\n\x04\x04\x05\x02\n\x12\x03Z\x041\
+    \"\r\x20Access\x20List\n\n\x0c\n\x05\x04\x05\x02\n\x04\x12\x03Z\x04\x0c\
+    \n\x0c\n\x05\x04\x05\x02\n\x06\x12\x03Z\r\x1f\n\x0c\n\x05\x04\x05\x02\n\
+    \x01\x12\x03Z\x20+\n\x0c\n\x05\x04\x05\x02\n\x03\x12\x03Z.0\n\x0c\n\x04\
+    \x04\x05\x03\0\x12\x04\\\x04_\x05\n\x0c\n\x05\x04\x05\x03\0\x01\x12\x03\
+    \\\x0c\x1e\n\r\n\x06\x04\x05\x03\0\x02\0\x12\x03]\x08$\n\x0e\n\x07\x04\
+    \x05\x03\0\x02\0\x04\x12\x03]\x08\x10\n\x0e\n\x07\x04\x05\x03\0\x02\0\
+    \x05\x12\x03]\x11\x17\n\x0e\n\x07\x04\x05\x03\0\x02\0\x01\x12\x03]\x18\
+    \x1f\n\x0e\n\x07\x04\x05\x03\0\x02\0\x03\x12\x03]\"#\n\r\n\x06\x04\x05\
+    \x03\0\x02\x01\x12\x03^\x08(\n\x0e\n\x07\x04\x05\x03\0\x02\x01\x04\x12\
+    \x03^\x08\x10\n\x0e\n\x07\x04\x05\x03\0\x02\x01\x05\x12\x03^\x11\x16\n\
+    \x0e\n\x07\x04\x05\x03\0\x02\x01\x01\x12\x03^\x17#\n\x0e\n\x07\x04\x05\
+    \x03\0\x02\x01\x03\x12\x03^&'\n\xbb\x02\n\x02\x04\x06\x12\x04i\0n\x01\
+    \x1a\xae\x02*\n\x20Response:\x20Device\x20asks\x20for\x20more\x20data\
+    \x20from\x20transaction\x20payload,\x20or\x20returns\x20the\x20signature\
+    .\n\x20If\x20data_length\x20is\x20set,\x20device\x20awaits\x20that\x20ma\
+    ny\x20more\x20bytes\x20of\x20payload.\n\x20Otherwise,\x20the\x20signatur\
+    e_*\x20fields\x20contain\x20the\x20computed\x20transaction\x20signature.\
+    \x20All\x20three\x20fields\x20will\x20be\x20present.\n\x20@end\n\x20@nex\
+    t\x20EthereumTxAck\n\n\n\n\x03\x04\x06\x01\x12\x03i\x08\x19\n8\n\x04\x04\
+    \x06\x02\0\x12\x03j\x04$\"+\x20Number\x20of\x20bytes\x20being\x20request\
+    ed\x20(<=\x201024)\n\n\x0c\n\x05\x04\x06\x02\0\x04\x12\x03j\x04\x0c\n\
+    \x0c\n\x05\x04\x06\x02\0\x05\x12\x03j\r\x13\n\x0c\n\x05\x04\x06\x02\0\
+    \x01\x12\x03j\x14\x1f\n\x0c\n\x05\x04\x06\x02\0\x03\x12\x03j\"#\nK\n\x04\
+    \x04\x06\x02\x01\x12\x03k\x04$\">\x20Computed\x20signature\x20(recovery\
+    \x20parameter,\x20limited\x20to\x2027\x20or\x2028)\n\n\x0c\n\x05\x04\x06\
+    \x02\x01\x04\x12\x03k\x04\x0c\n\x0c\n\x05\x04\x06\x02\x01\x05\x12\x03k\r\
+    \x13\n\x0c\n\x05\x04\x06\x02\x01\x01\x12\x03k\x14\x1f\n\x0c\n\x05\x04\
+    \x06\x02\x01\x03\x12\x03k\"#\n7\n\x04\x04\x06\x02\x02\x12\x03l\x04#\"*\
+    \x20Computed\x20signature\x20R\x20component\x20(256\x20bit)\n\n\x0c\n\
+    \x05\x04\x06\x02\x02\x04\x12\x03l\x04\x0c\n\x0c\n\x05\x04\x06\x02\x02\
+    \x05\x12\x03l\r\x12\n\x0c\n\x05\x04\x06\x02\x02\x01\x12\x03l\x13\x1e\n\
+    \x0c\n\x05\x04\x06\x02\x02\x03\x12\x03l!\"\n7\n\x04\x04\x06\x02\x03\x12\
+    \x03m\x04#\"*\x20Computed\x20signature\x20S\x20component\x20(256\x20bit)\
+    \n\n\x0c\n\x05\x04\x06\x02\x03\x04\x12\x03m\x04\x0c\n\x0c\n\x05\x04\x06\
+    \x02\x03\x05\x12\x03m\r\x12\n\x0c\n\x05\x04\x06\x02\x03\x01\x12\x03m\x13\
+    \x1e\n\x0c\n\x05\x04\x06\x02\x03\x03\x12\x03m!\"\nK\n\x02\x04\x07\x12\
+    \x04t\0v\x01\x1a?*\n\x20Request:\x20Transaction\x20payload\x20data.\n\
+    \x20@next\x20EthereumTxRequest\n\n\n\n\x03\x04\x07\x01\x12\x03t\x08\x15\
+    \n=\n\x04\x04\x07\x02\0\x12\x03u\x04\"\"0\x20Bytes\x20from\x20transactio\
+    n\x20payload\x20(<=\x201024\x20bytes)\n\n\x0c\n\x05\x04\x07\x02\0\x04\
+    \x12\x03u\x04\x0c\n\x0c\n\x05\x04\x07\x02\0\x05\x12\x03u\r\x12\n\x0c\n\
+    \x05\x04\x07\x02\0\x01\x12\x03u\x13\x1d\n\x0c\n\x05\x04\x07\x02\0\x03\
+    \x12\x03u\x20!\nk\n\x02\x04\x08\x12\x05~\0\x81\x01\x01\x1a^*\n\x20Reques\
+    t:\x20Ask\x20device\x20to\x20sign\x20message\n\x20@start\n\x20@next\x20E\
+    thereumMessageSignature\n\x20@next\x20Failure\n\n\n\n\x03\x04\x08\x01\
+    \x12\x03~\x08\x1b\n=\n\x04\x04\x08\x02\0\x12\x03\x7f\x04\"\"0\x20BIP-32\
+    \x20path\x20to\x20derive\x20the\x20key\x20from\x20master\x20node\n\n\x0c\
+    \n\x05\x04\x08\x02\0\x04\x12\x03\x7f\x04\x0c\n\x0c\n\x05\x04\x08\x02\0\
+    \x05\x12\x03\x7f\r\x13\n\x0c\n\x05\x04\x08\x02\0\x01\x12\x03\x7f\x14\x1d\
+    \n\x0c\n\x05\x04\x08\x02\0\x03\x12\x03\x7f\x20!\n$\n\x04\x04\x08\x02\x01\
+    \x12\x04\x80\x01\x04\x1f\"\x16\x20message\x20to\x20be\x20signed\n\n\r\n\
+    \x05\x04\x08\x02\x01\x04\x12\x04\x80\x01\x04\x0c\n\r\n\x05\x04\x08\x02\
+    \x01\x05\x12\x04\x80\x01\r\x12\n\r\n\x05\x04\x08\x02\x01\x01\x12\x04\x80\
+    \x01\x13\x1a\n\r\n\x05\x04\x08\x02\x01\x03\x12\x04\x80\x01\x1d\x1e\n0\n\
+    \x02\x04\t\x12\x06\x87\x01\0\x8a\x01\x01\x1a\"*\n\x20Response:\x20Signed\
+    \x20message\n\x20@end\n\n\x0b\n\x03\x04\t\x01\x12\x04\x87\x01\x08\x20\n(\
+    \n\x04\x04\t\x02\0\x12\x04\x88\x01\x04!\"\x1a\x20signature\x20of\x20the\
+    \x20message\n\n\r\n\x05\x04\t\x02\0\x04\x12\x04\x88\x01\x04\x0c\n\r\n\
+    \x05\x04\t\x02\0\x05\x12\x04\x88\x01\r\x12\n\r\n\x05\x04\t\x02\0\x01\x12\
+    \x04\x88\x01\x13\x1c\n\r\n\x05\x04\t\x02\0\x03\x12\x04\x88\x01\x1f\x20\n\
+    0\n\x04\x04\t\x02\x01\x12\x04\x89\x01\x04\x20\"\"\x20address\x20used\x20\
+    to\x20sign\x20the\x20message\n\n\r\n\x05\x04\t\x02\x01\x04\x12\x04\x89\
+    \x01\x04\x0c\n\r\n\x05\x04\t\x02\x01\x05\x12\x04\x89\x01\r\x13\n\r\n\x05\
+    \x04\t\x02\x01\x01\x12\x04\x89\x01\x14\x1b\n\r\n\x05\x04\t\x02\x01\x03\
+    \x12\x04\x89\x01\x1e\x1f\n]\n\x02\x04\n\x12\x06\x92\x01\0\x96\x01\x01\
+    \x1aO*\n\x20Request:\x20Ask\x20device\x20to\x20verify\x20message\n\x20@s\
+    tart\n\x20@next\x20Success\n\x20@next\x20Failure\n\n\x0b\n\x03\x04\n\x01\
+    \x12\x04\x92\x01\x08\x1d\n#\n\x04\x04\n\x02\0\x12\x04\x93\x01\x04!\"\x15\
+    \x20signature\x20to\x20verify\n\n\r\n\x05\x04\n\x02\0\x04\x12\x04\x93\
+    \x01\x04\x0c\n\r\n\x05\x04\n\x02\0\x05\x12\x04\x93\x01\r\x12\n\r\n\x05\
+    \x04\n\x02\0\x01\x12\x04\x93\x01\x13\x1c\n\r\n\x05\x04\n\x02\0\x03\x12\
+    \x04\x93\x01\x1f\x20\n!\n\x04\x04\n\x02\x01\x12\x04\x94\x01\x04\x1f\"\
+    \x13\x20message\x20to\x20verify\n\n\r\n\x05\x04\n\x02\x01\x04\x12\x04\
+    \x94\x01\x04\x0c\n\r\n\x05\x04\n\x02\x01\x05\x12\x04\x94\x01\r\x12\n\r\n\
+    \x05\x04\n\x02\x01\x01\x12\x04\x94\x01\x13\x1a\n\r\n\x05\x04\n\x02\x01\
+    \x03\x12\x04\x94\x01\x1d\x1e\n!\n\x04\x04\n\x02\x02\x12\x04\x95\x01\x04\
+    \x20\"\x13\x20address\x20to\x20verify\n\n\r\n\x05\x04\n\x02\x02\x04\x12\
+    \x04\x95\x01\x04\x0c\n\r\n\x05\x04\n\x02\x02\x05\x12\x04\x95\x01\r\x13\n\
+    \r\n\x05\x04\n\x02\x02\x01\x12\x04\x95\x01\x14\x1b\n\r\n\x05\x04\n\x02\
+    \x02\x03\x12\x04\x95\x01\x1e\x1f\
 ";
 
 static file_descriptor_proto_lazy: ::protobuf::rt::LazyV2<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::rt::LazyV2::INIT;

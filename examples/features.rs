@@ -1,6 +1,9 @@
+extern crate bitcoin;
 extern crate trezor;
 
-use std::io;
+use std::{io, str::FromStr};
+
+use bitcoin::util::{self, bip32::DerivationPath};
 
 fn device_selector() -> trezor::Trezor {
 	let mut devices = trezor::find_devices(false).expect("error finding devices");
@@ -45,6 +48,11 @@ fn do_main() -> Result<(), trezor::Error> {
 	println!("is initialized: {}", f.get_initialized());
 	println!("pin protection: {}", f.get_pin_protection());
 	println!("passphrase protection: {}", f.get_passphrase_protection());
+	println!("{:?}", trezor
+		.ethereum_get_address(trezor::utils::convert_path(
+			&util::bip32::DerivationPath::from_str("m/44'/60'/1'/0/0").unwrap(),
+		))
+		.unwrap());
 	//optional bool bootloader_mode = 5;          // is device in bootloader mode?
 	//optional string language = 9;               // device language
 	//optional bytes revision = 13;               // SCM revision of firmware
