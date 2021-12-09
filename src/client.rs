@@ -1,4 +1,5 @@
 use std::fmt;
+use std::any::type_name;
 
 use bitcoin::network::constants::Network; //TODO(stevenroose) change after https://github.com/rust-bitcoin/rust-bitcoin/pull/181
 use bitcoin::util::bip32;
@@ -23,6 +24,10 @@ pub use protos::ButtonRequest_ButtonRequestType as ButtonRequestType;
 pub use protos::Features;
 pub use protos::InputScriptType;
 pub use protos::PinMatrixRequest_PinMatrixRequestType as PinMatrixRequestType;
+
+fn type_of<T>(_: T) -> &'static str {
+    type_name::<T>()
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Copy)]
 /// An ECDSA signature
@@ -747,4 +752,58 @@ impl Trezor {
 			s: resp.get_signature_s().into(),
 		})
 	}
+
+	// pub fn ethereum_sign_eip712(
+	// 	&mut self,
+	// 	path: Vec<u32>
+	// ) -> Result<()> {// Result<Signature> {
+	// 	let mut req = protos::EthereumSignTypedData::new();
+	// 	req.set_address_n(path);
+	// 	req.set_metamask_v4_compat(true); // TODO is it ?
+	// 	req.set_primary_type("what is it".into());
+
+	// 	let resp = handle_interaction(
+	// 		self.call(req, Box::new(|_, m: protos::EthereumTypedDataStructRequest | {
+	// 			Ok(m)
+	// 		}
+	// 		))
+	// 			.unwrap(),
+	// 	)
+	// 	.unwrap();
+
+	// 	let resp_type = type_of(&resp);
+
+	// 	while type_of(&resp) == resp_type {
+	// 		let mut req = protos::EthereumTypedDataStructAck_EthereumStructMember::new();
+	// 		// req.set_field_type(v)
+	// 		// req.set_name(v)
+
+	// 	}
+
+
+	// // 	data: Dict[str, Any],
+	// // 	*,
+	// // 	metamask_v4_compat: bool = True,
+	// // ) -> "MessageType":
+	// // 	data = sanitize_typed_data(data)
+	// // 	types = data["types"]
+	// 	// while isinstance(response, messages.EthereumTypedDataStructRequest):
+	// 		// struct_name = response.name
+
+	// 		// members: List["messages.EthereumStructMember"] = []
+	// 		// for field in types[struct_name]:
+	// 		//     field_type = get_field_type(field["type"], types)
+	// 		//     struct_member = messages.EthereumStructMember(
+	// 		//         type=field_type,
+	// 		//         name=field["name"],
+	// 		//     )
+	// 		//     members.append(struct_member)
+
+	// 		// request = messages.EthereumTypedDataStructAck(members=members)
+	// 		// response = client.call(request)
+
+
+	// 	Ok(())
+	// }
+
 }

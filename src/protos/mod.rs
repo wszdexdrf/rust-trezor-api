@@ -8,6 +8,7 @@ pub mod messages_management;
 // unused:
 pub mod messages_cardano;
 pub mod messages_ethereum;
+pub mod messages_ethereum_eip712;
 pub mod messages_lisk;
 pub mod messages_monero;
 pub mod messages_nem;
@@ -27,6 +28,7 @@ pub use self::messages_management::*;
 // unused:
 pub use self::messages_cardano::*;
 pub use self::messages_ethereum::*;
+pub use self::messages_ethereum_eip712::*;
 pub use self::messages_lisk::*;
 pub use self::messages_monero::*;
 pub use self::messages_nem::*;
