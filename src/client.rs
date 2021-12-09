@@ -35,6 +35,15 @@ pub struct Signature {
 	pub v: u64,
 }
 
+/// Access list item
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct AccessListItem {
+    /// Accessed address
+    pub address: String,
+    /// Accessed storage keys
+    pub storage_keys: Vec<Vec<u8>>,
+}
+
 /// The different options for the number of words in a seed phrase.
 pub enum WordCount {
 	W12 = 12,
@@ -631,9 +640,6 @@ impl Trezor {
 		req.set_chain_id(chain_id);
 		req.set_to(to);
 
-		let len = data.len();
-		let v: Vec<u8> = data.clone().splice(..len, []).collect();
-
 		req.set_data_length(data.len() as u32);
 		req.set_data_initial_chunk(data.splice(..std::cmp::min(1024, data.len()), []).collect());
 
@@ -674,24 +680,42 @@ impl Trezor {
 		value: Vec<u8>,
 		_data: Vec<u8>,
 		chain_id: u64,
-		max_gas_fee: Option<Vec<u8>>,
-	    max_priority_fee: Option<Vec<u8>>
-    	// access_list: List[ethereum.messages.EthereumAccessList],
+		max_gas_fee: Vec<u8>,
+	    max_priority_fee: Vec<u8>,
+		access_list: Vec<AccessListItem>
 	) -> Result<Signature> {
 		let mut req = protos::EthereumSignTxEIP1559::new();
 		let mut data = _data.clone();
 
 		req.set_address_n(path);
 		req.set_nonce(nonce);
-		req.set_max_gas_fee(max_gas_fee.unwrap());
-		req.set_max_priority_fee(max_priority_fee.unwrap());
+		req.set_max_gas_fee(max_gas_fee);
+		req.set_max_priority_fee(max_priority_fee);
 		req.set_gas_limit(gas_limit);
 		req.set_value(value);
 		req.set_chain_id(chain_id);
 		req.set_to(to);
 
-		let len = data.len();
-		let v: Vec<u8> = data.clone().splice(..len, []).collect();
+		if access_list.len() > 0 {
+			let mut list_access = Vec::new();
+
+			for item in access_list {
+				let mut access = protos::EthereumSignTxEIP1559_EthereumAccessList::new();
+
+				access.set_address(item.address);
+				access.set_storage_keys(
+					protobuf::RepeatedField::from_vec(
+						item.storage_keys	
+					)
+				);
+
+				list_access.push(
+					access
+				)
+			}
+			
+			req.set_access_list(protobuf::RepeatedField::from_vec(list_access.clone()));
+		}
 
 		req.set_data_length(data.len() as u32);
 		req.set_data_initial_chunk(data.splice(..std::cmp::min(1024, data.len()), []).collect());
