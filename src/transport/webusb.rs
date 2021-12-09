@@ -1,7 +1,7 @@
-use std::fmt;
+use std::{fmt, result::Result};
 use std::time::Duration;
 
-use libusb;
+use rusb::*;
 
 use super::super::AvailableDevice;
 use transport::error::Error;
@@ -44,8 +44,7 @@ impl fmt::Display for AvailableWebUsbTransport {
 
 /// An actual serial HID USB link to a device over which bytes can be sent.
 pub struct WebUsbLink {
-	libusb_context: &'static libusb::Context,
-	handle: &'static mut libusb::DeviceHandle<'static>,
+	handle: &'static mut rusb::DeviceHandle<GlobalContext>,
 	endpoint: u8,
 }
 
@@ -53,8 +52,6 @@ impl Drop for WebUsbLink {
 	fn drop(&mut self) {
 		// Re-box the two static references and manually drop them.
 		drop(unsafe { Box::from_raw(self.handle) });
-		let context_ptr = self.libusb_context as *const _ as *mut libusb::Context;
-		drop(unsafe { Box::from_raw(context_ptr) });
 	}
 }
 
@@ -89,10 +86,9 @@ pub struct WebUsbTransport {
 
 impl WebUsbTransport {
 	pub fn find_devices(debug: bool) -> Result<Vec<AvailableDevice>, Error> {
-		let usb_ctx = libusb::Context::new()?;
-
 		let mut devices = Vec::new();
-		for dev in usb_ctx.devices()?.iter() {
+
+		for dev in rusb::devices().unwrap().iter() {
 			let desc = dev.device_descriptor()?;
 			let dev_id = (desc.vendor_id(), desc.product_id());
 
@@ -106,10 +102,10 @@ impl WebUsbTransport {
 				.config_descriptor(constants::CONFIG_ID)?
 				.interfaces()
 				.find(|i| i.number() == constants::INTERFACE)
-				.ok_or(libusb::Error::Other)?
+				.ok_or(rusb::Error::Other)?
 				.descriptors()
 				.find(|d| d.setting_number() == constants::INTERFACE_DESCRIPTOR)
-				.ok_or(libusb::Error::Other)?
+				.ok_or(rusb::Error::Other)?
 				.class_code();
 			if class_code != constants::LIBUSB_CLASS_VENDOR_SPEC {
 				continue;
@@ -139,18 +135,9 @@ impl WebUsbTransport {
 			true => constants::INTERFACE_DEBUG,
 		};
 
-		// To circumvent a limitation from the libusb crate, we need to do some unsafe stuff to be
-		// able to store the context and the device handle.  We will allocate them on the heap using
-		// boxes, but leak them into static references. In the Drop method for the Transport, we
-		// will release the memory manually.
-
-		let context = libusb::Context::new()?;
-		let context_ptr = Box::into_raw(Box::new(context));
-		let context_ref = unsafe { &*context_ptr as &'static libusb::Context };
 		// Go over the devices again to match the desired device.
 		let handle = {
-			let dev = context_ref
-				.devices()?
+			let dev = rusb::devices()?
 				.iter()
 				.find(|dev| dev.bus_number() == transport.bus && dev.address() == transport.address)
 				.ok_or(Error::DeviceDisconnected)?;
@@ -164,13 +151,13 @@ impl WebUsbTransport {
 			handle.claim_interface(interface)?;
 			handle
 		};
+
 		let handle_ptr = Box::into_raw(Box::new(handle));
-		let handle_ref = unsafe { &mut *handle_ptr as &'static mut libusb::DeviceHandle<'static> };
+		let handle_ref = unsafe { &mut *handle_ptr as &'static mut DeviceHandle<GlobalContext> };
 
 		Ok(Box::new(WebUsbTransport {
 			protocol: ProtocolV1 {
 				link: WebUsbLink {
-					libusb_context: context_ref,
 					handle: handle_ref,
 					endpoint: match device.debug {
 						false => constants::ENDPOINT,

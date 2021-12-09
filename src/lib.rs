@@ -18,7 +18,7 @@ extern crate bitcoin_hashes;
 extern crate byteorder;
 extern crate hex;
 extern crate hid;
-extern crate libusb;
+extern crate rusb;
 extern crate unicode_normalization;
 #[macro_use]
 extern crate log;

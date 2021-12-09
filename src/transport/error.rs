@@ -4,15 +4,15 @@ use std::error;
 use std::fmt;
 
 use hid;
-use libusb;
+use rusb;
 
 /// Trezor error.
 #[derive(Debug)]
 pub enum Error {
 	/// Error from hidapi.
 	Hid(hid::Error),
-	/// Error from libusb.
-	Usb(libusb::Error),
+	/// Error from ruusb.
+	Usb(rusb::Error),
 	/// The device to connect to was not found.
 	DeviceNotFound,
 	/// The device is no longer available.
@@ -41,8 +41,8 @@ impl From<hid::Error> for Error {
 	}
 }
 
-impl From<libusb::Error> for Error {
-	fn from(e: libusb::Error) -> Error {
+impl From<rusb::Error> for Error {
+	fn from(e: rusb::Error) -> Error {
 		Error::Usb(e)
 	}
 }
