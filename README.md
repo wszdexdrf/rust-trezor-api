@@ -1,5 +1,6 @@
 
 # Rust Trezor API
+![Github Actions](https://github.com/joshieDo/rust-trezor-api/workflows/Build/badge.svg)
 
 A fork of a [fork](https://github.com/romanz/rust-trezor-api) of a [lib](https://github.com/stevenroose/rust-trezor-api), which provides a way to communicate with a Trezor T device from a rust project.
 
