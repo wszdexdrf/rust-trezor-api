@@ -2,7 +2,7 @@ extern crate bitcoin;
 extern crate fern;
 extern crate hex;
 extern crate log;
-extern crate trezor;
+extern crate trezor_client;
 
 use std::collections::HashMap;
 use std::io::{self, Write};
@@ -12,7 +12,7 @@ use bitcoin::{
 	util::bip32, util::hash::BitcoinHash, util::psbt, Address, Transaction, TxIn, TxOut,
 };
 
-use trezor::{Error, SignTxProgress, TrezorMessage, TrezorResponse};
+use trezor_client::{Error, SignTxProgress, TrezorMessage, TrezorResponse};
 
 fn setup_logger() {
 	fern::Dispatch::new()
@@ -69,7 +69,7 @@ fn tx_progress(
 fn main() {
 	setup_logger();
 	// init with debugging
-	let mut trezor = trezor::unique(true).unwrap();
+	let mut trezor = trezor_client::unique(true).unwrap();
 	trezor.init_device(None).unwrap();
 
 	let pubkey = handle_interaction(
@@ -81,7 +81,7 @@ fn main() {
 					bip32::ChildNumber::from_hardened_idx(1).unwrap(),
 				]
 				.into(),
-				trezor::protos::InputScriptType::SPENDADDRESS,
+				trezor_client::protos::InputScriptType::SPENDADDRESS,
 				Network::Testnet,
 				true,
 			)

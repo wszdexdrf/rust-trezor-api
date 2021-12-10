@@ -1,5 +1,5 @@
 [package]
-name = "trezor"
+name = "trezor-client"
 version = "0.0.2"
 authors = ["joshie", "romanz", "Steven Roose <steven@stevenroose.org>"]
 license = "CC0-1.0"

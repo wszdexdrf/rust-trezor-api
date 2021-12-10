@@ -1,12 +1,12 @@
 extern crate bitcoin;
-extern crate trezor;
+extern crate trezor_client;
 
 use std::{io, str::FromStr};
 
 use bitcoin::util::{self};
 
-fn device_selector() -> trezor::Trezor {
-	let mut devices = trezor::find_devices(false).expect("error finding devices");
+fn device_selector() -> trezor_client::Trezor {
+	let mut devices = trezor_client::find_devices(false).expect("error finding devices");
 
 	if devices.len() == 0 {
 		panic!("No devices connected");
@@ -28,7 +28,7 @@ fn device_selector() -> trezor::Trezor {
 	}
 }
 
-fn do_main() -> Result<(), trezor::Error> {
+fn do_main() -> Result<(), trezor_client::Error> {
 	// init with debugging
 
 	let mut trezor = device_selector();
@@ -51,7 +51,7 @@ fn do_main() -> Result<(), trezor::Error> {
 	println!(
 		"{:?}",
 		trezor
-			.ethereum_get_address(trezor::utils::convert_path(
+			.ethereum_get_address(trezor_client::utils::convert_path(
 				&util::bip32::DerivationPath::from_str("m/44'/60'/1'/0/0").unwrap(),
 			))
 			.unwrap()
@@ -65,7 +65,7 @@ fn do_main() -> Result<(), trezor::Error> {
 	println!(
 		"{:?}",
 		trezor2
-			.ethereum_get_address(trezor::utils::convert_path(
+			.ethereum_get_address(trezor_client::utils::convert_path(
 				&util::bip32::DerivationPath::from_str("m/44'/60'/1'/0/0").unwrap(),
 			))
 			.unwrap()

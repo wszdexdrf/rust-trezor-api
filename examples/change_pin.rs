@@ -1,4 +1,4 @@
-extern crate trezor;
+extern crate trezor_client;
 
 use std::io;
 
@@ -12,9 +12,9 @@ fn read_pin() -> String {
 	pin[..4].to_owned()
 }
 
-fn do_main() -> Result<(), trezor::Error> {
+fn do_main() -> Result<(), trezor_client::Error> {
 	// init with debugging
-	let mut trezor = trezor::unique(true)?;
+	let mut trezor = trezor_client::unique(true)?;
 	trezor.init_device(None)?;
 
 	let old_pin = trezor.change_pin(false)?.button_request()?.ack()?.pin_matrix_request()?;
