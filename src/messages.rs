@@ -36,7 +36,6 @@ trezor_message_impl!(Features, MessageType_Features);
 trezor_message_impl!(PinMatrixRequest, MessageType_PinMatrixRequest);
 trezor_message_impl!(PinMatrixAck, MessageType_PinMatrixAck);
 trezor_message_impl!(Cancel, MessageType_Cancel);
-trezor_message_impl!(ClearSession, MessageType_ClearSession);
 trezor_message_impl!(ApplySettings, MessageType_ApplySettings);
 trezor_message_impl!(ButtonRequest, MessageType_ButtonRequest);
 trezor_message_impl!(ButtonAck, MessageType_ButtonAck);
