@@ -292,8 +292,8 @@ pub struct Trezor {
 /// Create a new Trezor instance with the given transport.
 pub fn trezor_with_transport(model: Model, transport: Box<dyn Transport>) -> Trezor {
 	Trezor {
-		model: model,
-		transport: transport,
+		model,
+		transport,
 		features: None,
 	}
 }
@@ -314,8 +314,8 @@ impl Trezor {
 	/// f.e. for supporting additional coins etc.
 	pub fn call_raw<S: TrezorMessage>(&mut self, message: S) -> Result<ProtoMessage> {
 		let proto_msg = ProtoMessage(S::message_type(), message.write_to_bytes()?);
-		self.transport.write_message(proto_msg).map_err(|e| Error::TransportSendMessage(e))?;
-		self.transport.read_message().map_err(|e| Error::TransportReceiveMessage(e))
+		self.transport.write_message(proto_msg).map_err(Error::TransportSendMessage)?;
+		self.transport.read_message().map_err(Error::TransportReceiveMessage)
 	}
 
 	/// Sends a message and returns a TrezorResponse with either the expected response message,
@@ -346,7 +346,7 @@ impl Trezor {
 					Ok(TrezorResponse::ButtonRequest(ButtonRequest {
 						message: req_msg,
 						client: self,
-						result_handler: result_handler,
+						result_handler,
 					}))
 				}
 				MessageType_PinMatrixRequest => {
@@ -355,7 +355,7 @@ impl Trezor {
 					Ok(TrezorResponse::PinMatrixRequest(PinMatrixRequest {
 						message: req_msg,
 						client: self,
-						result_handler: result_handler,
+						result_handler,
 					}))
 				}
 				MessageType_PassphraseRequest => {
@@ -364,7 +364,7 @@ impl Trezor {
 					Ok(TrezorResponse::PassphraseRequest(PassphraseRequest {
 						message: req_msg,
 						client: self,
-						result_handler: result_handler,
+						result_handler,
 					}))
 				}
 				mtype => {
@@ -436,6 +436,7 @@ impl Trezor {
 		self.call(req, Box::new(|_, _| Ok(())))
 	}
 
+	#[allow(clippy::too_many_arguments)]
 	pub fn reset_device(
 		&mut self,
 		display_random: bool,
@@ -502,7 +503,7 @@ impl Trezor {
 		show_display: bool,
 	) -> Result<TrezorResponse<bip32::ExtendedPubKey, protos::PublicKey>> {
 		let mut req = protos::GetPublicKey::new();
-		req.set_address_n(utils::convert_path(&path));
+		req.set_address_n(utils::convert_path(path));
 		req.set_show_display(show_display);
 		req.set_coin_name(utils::coin_name(network)?);
 		req.set_script_type(script_type);
@@ -518,7 +519,7 @@ impl Trezor {
 		show_display: bool,
 	) -> Result<TrezorResponse<Address, protos::Address>> {
 		let mut req = protos::GetAddress::new();
-		req.set_address_n(utils::convert_path(&path));
+		req.set_address_n(utils::convert_path(path));
 		req.set_coin_name(utils::coin_name(network)?);
 		req.set_show_display(show_display);
 		req.set_script_type(script_type);
@@ -549,7 +550,7 @@ impl Trezor {
 	) -> Result<TrezorResponse<(Address, secp256k1::RecoverableSignature), protos::MessageSignature>>
 	{
 		let mut req = protos::SignMessage::new();
-		req.set_address_n(utils::convert_path(&path));
+		req.set_address_n(utils::convert_path(path));
 		// Normalize to Unicode NFC.
 		let msg_bytes = message.nfc().collect::<String>().into_bytes();
 		req.set_message(msg_bytes);
@@ -582,7 +583,7 @@ impl Trezor {
 	// ETHEREUM
 	pub fn ethereum_get_address(&mut self, path: Vec<u32>) -> Result<String> {
 		let mut req = protos::EthereumGetAddress::new();
-		req.set_address_n(path.clone());
+		req.set_address_n(path);
 
 		let address = handle_interaction(
 			self.call(req, Box::new(|_, m: protos::EthereumAddress| Ok(m.get_address().into())))?,
@@ -615,6 +616,7 @@ impl Trezor {
 		Ok(signature)
 	}
 
+	#[allow(clippy::too_many_arguments)]
 	pub fn ethereum_sign_tx(
 		&mut self,
 		path: Vec<u32>,
@@ -627,7 +629,7 @@ impl Trezor {
 		chain_id: u64,
 	) -> Result<Signature> {
 		let mut req = protos::EthereumSignTx::new();
-		let mut data = _data.clone();
+		let mut data = _data;
 
 		req.set_address_n(path);
 		req.set_nonce(nonce);
@@ -661,6 +663,7 @@ impl Trezor {
 		})
 	}
 
+	#[allow(clippy::too_many_arguments)]
 	pub fn ethereum_sign_eip1559_tx(
 		&mut self,
 		path: Vec<u32>,
@@ -675,7 +678,7 @@ impl Trezor {
 		access_list: Vec<AccessListItem>,
 	) -> Result<Signature> {
 		let mut req = protos::EthereumSignTxEIP1559::new();
-		let mut data = _data.clone();
+		let mut data = _data;
 
 		req.set_address_n(path);
 		req.set_nonce(nonce);
@@ -686,7 +689,7 @@ impl Trezor {
 		req.set_chain_id(chain_id);
 		req.set_to(to);
 
-		if access_list.len() > 0 {
+		if !access_list.is_empty() {
 			let mut list_access = Vec::new();
 
 			for item in access_list {

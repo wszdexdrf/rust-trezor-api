@@ -130,17 +130,17 @@ impl HidTransport {
 				Some(m) => m,
 				None => continue,
 			};
-			if derive_debug(&dev) != Some(debug) {
+			if derive_debug(dev) != Some(debug) {
 				continue;
 			}
 			let serial = match dev.serial_number() {
-				Some(s) => s.clone(),
+				Some(s) => s,
 				None => continue,
 			};
 
 			devices.push(AvailableDevice {
-				model: model,
-				debug: debug,
+				model,
+				debug,
 				transport: AvailableDeviceTransport::Hid(AvailableHidTransport {
 					serial_nb: serial.into(),
 				}),
@@ -163,8 +163,8 @@ impl HidTransport {
 			.device_list()
 			.find_map(|dev| {
 				let dev_id = (dev.vendor_id(), dev.product_id());
-				if derive_model(dev_id) == Some(device.model.clone())
-					&& derive_debug(&dev) == Some(device.debug)
+				if derive_model(dev_id) == Some(device.model)
+					&& derive_debug(dev) == Some(device.debug)
 					&& dev.serial_number() == Some(transport.serial_nb.as_str())
 				{
 					Some(hidman.open(dev.vendor_id(), dev.product_id()))
@@ -179,7 +179,7 @@ impl HidTransport {
 			protocol: ProtocolV1 {
 				link: HidLink {
 					_hid_manager: hidman,
-					hid_version: hid_version,
+					hid_version,
 					handle: Some(handle),
 				},
 			},

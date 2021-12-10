@@ -33,12 +33,12 @@ fn ack_input_request(
 	let input_index = req.get_details().get_request_index() as usize;
 	let input = if req.get_details().has_tx_hash() {
 		let req_hash: sha256d::Hash = utils::from_rev_bytes(req.get_details().get_tx_hash())
-			.ok_or(Error::MalformedTxRequest(req.clone()))?;
+			.ok_or_else(|| Error::MalformedTxRequest(req.clone()))?;
 		trace!("Preparing ack for input {}:{}", req_hash, input_index);
-		let inp = utils::psbt_find_input(&psbt, req_hash)?;
+		let inp = utils::psbt_find_input(psbt, req_hash)?;
 		let tx = inp.non_witness_utxo.as_ref().ok_or(Error::PsbtMissingInputTx(req_hash))?;
 		let opt = &tx.input.get(input_index);
-		opt.ok_or(Error::TxRequestInvalidIndex(input_index))?
+		opt.ok_or_else(|| Error::TxRequestInvalidIndex(input_index))?
 	} else {
 		trace!("Preparing ack for tx input #{}", input_index);
 		let opt = &psbt.global.unsigned_tx.input.get(input_index);
@@ -56,7 +56,7 @@ fn ack_input_request(
 		let psbt_input = psbt
 			.inputs
 			.get(input_index)
-			.ok_or(Error::InvalidPsbt("not enough psbt inputs".to_owned()))?;
+			.ok_or_else(|| Error::InvalidPsbt("not enough psbt inputs".to_owned()))?;
 
 		// Get the output we are spending from the PSBT input.
 		let txout = if let Some(ref txout) = psbt_input.witness_utxo {
@@ -64,7 +64,7 @@ fn ack_input_request(
 		} else if let Some(ref tx) = psbt_input.non_witness_utxo {
 			tx.output
 				.get(input.previous_output.vout as usize)
-				.ok_or(Error::InvalidPsbt(format!("invalid utxo for PSBT input {}", input_index)))?
+				.ok_or_else(|| Error::InvalidPsbt(format!("invalid utxo for PSBT input {}", input_index)))?
 		} else {
 			return Err(Error::InvalidPsbt(format!("no utxo for PSBT input {}", input_index)));
 		};
@@ -72,11 +72,11 @@ fn ack_input_request(
 		// If there is exactly 1 HD keypath known, we can provide it.  If more it's multisig.
 		if psbt_input.hd_keypaths.len() == 1 {
 			data_input.set_address_n(
-				(psbt_input.hd_keypaths.iter().nth(0).unwrap().1)
+				(psbt_input.hd_keypaths.iter().next().unwrap().1)
 					.1
 					.as_ref()
 					.iter()
-					.map(|i| i.clone().into())
+					.map(|i| (*i).into())
 					.collect(),
 			);
 		}
@@ -127,12 +127,12 @@ fn ack_output_request(
 		// Dependent tx, take the output from the PSBT and just create bin_output.
 		let output_index = req.get_details().get_request_index() as usize;
 		let req_hash: sha256d::Hash = utils::from_rev_bytes(req.get_details().get_tx_hash())
-			.ok_or(Error::MalformedTxRequest(req.clone()))?;
+			.ok_or_else(|| Error::MalformedTxRequest(req.clone()))?;
 		trace!("Preparing ack for output {}:{}", req_hash, output_index);
-		let inp = utils::psbt_find_input(&psbt, req_hash)?;
+		let inp = utils::psbt_find_input(psbt, req_hash)?;
 		let output = if let Some(ref tx) = inp.non_witness_utxo {
 			let opt = &tx.output.get(output_index);
-			opt.ok_or(Error::TxRequestInvalidIndex(output_index))?
+			opt.ok_or_else(|| Error::TxRequestInvalidIndex(output_index))?
 		} else if let Some(ref utxo) = inp.witness_utxo {
 			utxo
 		} else {
@@ -163,14 +163,14 @@ fn ack_output_request(
 		let psbt_output = psbt
 			.outputs
 			.get(output_index)
-			.ok_or(Error::InvalidPsbt("output indices don't match".to_owned()))?;
+			.ok_or_else(|| Error::InvalidPsbt("output indices don't match".to_owned()))?;
 		if psbt_output.hd_keypaths.len() == 1 {
 			data_output.set_address_n(
-				(psbt_output.hd_keypaths.iter().nth(0).unwrap().1)
+				(psbt_output.hd_keypaths.iter().next().unwrap().1)
 					.1
 					.as_ref()
 					.iter()
-					.map(|i| i.clone().into())
+					.map(|i| (*i).into())
 					.collect(),
 			);
 
@@ -212,9 +212,9 @@ fn ack_meta_request(
 	let tx: &Transaction = if req.get_details().has_tx_hash() {
 		// dependeny tx, look for it in PSBT inputs
 		let req_hash: sha256d::Hash = utils::from_rev_bytes(req.get_details().get_tx_hash())
-			.ok_or(Error::MalformedTxRequest(req.clone()))?;
+			.ok_or_else(|| Error::MalformedTxRequest(req.clone()))?;
 		trace!("Preparing ack for tx meta of {}", req_hash);
-		let inp = utils::psbt_find_input(&psbt, req_hash)?;
+		let inp = utils::psbt_find_input(psbt, req_hash)?;
 		inp.non_witness_utxo.as_ref().ok_or(Error::PsbtMissingInputTx(req_hash))?
 	} else {
 		// currently signing tx
@@ -252,8 +252,8 @@ impl<'a> SignTxProgress<'a> {
 	/// Only intended for internal usage.
 	pub fn new(client: &mut Trezor, req: protos::TxRequest) -> SignTxProgress {
 		SignTxProgress {
-			client: client,
-			req: req,
+			client,
+			req,
 		}
 	}
 
@@ -329,9 +329,9 @@ impl<'a> SignTxProgress<'a> {
 		assert!(self.req.get_request_type() != TxRequestType::TXFINISHED);
 
 		let ack = match self.req.get_request_type() {
-			TxRequestType::TXINPUT => ack_input_request(&self.req, &psbt),
-			TxRequestType::TXOUTPUT => ack_output_request(&self.req, &psbt, network),
-			TxRequestType::TXMETA => ack_meta_request(&self.req, &psbt),
+			TxRequestType::TXINPUT => ack_input_request(&self.req, psbt),
+			TxRequestType::TXOUTPUT => ack_output_request(&self.req, psbt, network),
+			TxRequestType::TXMETA => ack_meta_request(&self.req, psbt),
 			TxRequestType::TXEXTRADATA => unimplemented!(), //TODO(stevenroose) implement
 			TxRequestType::TXFINISHED => unreachable!(),
 		}?;

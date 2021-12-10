@@ -60,7 +60,7 @@ impl Link for WebUsbLink {
 		debug_assert_eq!(CHUNK_SIZE, chunk.len());
 		let timeout = Duration::from_millis(WRITE_TIMEOUT_MS);
 		if let Err(e) = self.handle.write_interrupt(self.endpoint, &chunk, timeout) {
-			return Err(e)?;
+			return Err(e.into());
 		}
 		Ok(())
 	}
@@ -112,8 +112,8 @@ impl WebUsbTransport {
 			}
 
 			devices.push(AvailableDevice {
-				model: model,
-				debug: debug,
+				model,
+				debug,
 				transport: AvailableDeviceTransport::WebUsb(AvailableWebUsbTransport {
 					bus: dev.bus_number(),
 					address: dev.address(),

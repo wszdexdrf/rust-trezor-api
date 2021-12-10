@@ -46,7 +46,7 @@ impl ProtoMessage {
 
 	/// Take the payload from the ProtoMessage and parse it to a protobuf message.
 	pub fn into_message<M: protobuf::Message>(self) -> Result<M, protobuf::error::ProtobufError> {
-		Ok(protobuf::Message::parse_from_bytes(&self.into_payload())?)
+		protobuf::Message::parse_from_bytes(&self.into_payload())
 	}
 }
 
@@ -64,8 +64,8 @@ pub trait Transport {
 /// transport types.
 pub fn connect(available_device: &AvailableDevice) -> Result<Box<dyn Transport>, error::Error> {
 	match available_device.transport {
-		AvailableDeviceTransport::Hid(_) => hid::HidTransport::connect(&available_device),
-		AvailableDeviceTransport::WebUsb(_) => webusb::WebUsbTransport::connect(&available_device),
+		AvailableDeviceTransport::Hid(_) => hid::HidTransport::connect(available_device),
+		AvailableDeviceTransport::WebUsb(_) => webusb::WebUsbTransport::connect(available_device),
 	}
 }
 

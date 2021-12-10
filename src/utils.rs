@@ -44,7 +44,7 @@ pub fn address_from_script(script: &Script, network: Network) -> Option<address:
 		} else {
 			return None;
 		},
-		network: network,
+		network,
 	})
 }
 
@@ -68,7 +68,7 @@ pub fn from_rev_bytes(rev_bytes: &[u8]) -> Option<sha256d::Hash> {
 
 /// Get the reverse byte representation of a hash.
 pub fn to_rev_bytes(hash: &sha256d::Hash) -> [u8; 32] {
-	let mut bytes = hash.clone().into_inner();
+	let mut bytes = (*hash).into_inner();
 	bytes.reverse();
 	bytes
 }
@@ -88,7 +88,7 @@ pub fn parse_recoverable_signature(
 		(sig[0] - 27) as i32
 	})?;
 
-	Ok(secp256k1::RecoverableSignature::from_compact(&sig[1..], rec_id)?)
+	secp256k1::RecoverableSignature::from_compact(&sig[1..], rec_id)
 }
 
 /// Convert a bitcoin network constant to the Trezor-compatible coin_name string.
