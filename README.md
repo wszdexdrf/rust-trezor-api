@@ -1,9 +1,9 @@
 
 # Rust Trezor API
 
-A fork of a [fork](https://github.com/romanz/rust-trezor-api) of a [fork](https://github.com/stevenroose/rust-trezor-api), which provides a way to communicate with a Trezor T device from a rust project.
+A fork of a [fork](https://github.com/romanz/rust-trezor-api) of a [lib](https://github.com/stevenroose/rust-trezor-api), which provides a way to communicate with a Trezor T device from a rust project.
 
-Previous forks were focused on bitcoin-only, **this one focuses on providing an ethereum interface**, which can be used by [ethers-rs](https://github.com/gakonst/ethers-rs/).
+Previous iterations were focused on bitcoin-only, **this one focuses on providing an ethereum interface**, which can be used by [ethers-rs](https://github.com/gakonst/ethers-rs/).
 
 
 ## Requirements
