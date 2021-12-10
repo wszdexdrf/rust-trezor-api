@@ -3,7 +3,7 @@ extern crate trezor;
 
 use std::{io, str::FromStr};
 
-use bitcoin::util::{self, bip32::DerivationPath};
+use bitcoin::util::{self};
 
 fn device_selector() -> trezor::Trezor {
 	let mut devices = trezor::find_devices(false).expect("error finding devices");
@@ -32,7 +32,7 @@ fn do_main() -> Result<(), trezor::Error> {
 	// init with debugging
 
 	let mut trezor = device_selector();
-	trezor.init_device()?;
+	trezor.init_device(None)?;
 	let f = trezor.features().expect("no features");
 
 	println!("Features:");
@@ -48,6 +48,14 @@ fn do_main() -> Result<(), trezor::Error> {
 	println!("is initialized: {}", f.get_initialized());
 	println!("pin protection: {}", f.get_pin_protection());
 	println!("passphrase protection: {}", f.get_passphrase_protection());
+	println!(
+		"{:?}",
+		trezor
+			.ethereum_get_address(trezor::utils::convert_path(
+				&util::bip32::DerivationPath::from_str("m/44'/60'/1'/0/0").unwrap(),
+			))
+			.unwrap()
+	);
 	println!(
 		"{:?}",
 		trezor

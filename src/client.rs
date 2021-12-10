@@ -18,7 +18,6 @@ use transport::{ProtoMessage, Transport};
 use utils;
 
 // Some types with raw protos that we use in the public interface so they have to be exported.
-use protos::ApplySettings_PassphraseSourceType as PassphraseSource;
 pub use protos::ButtonRequest_ButtonRequestType as ButtonRequestType;
 pub use protos::Features;
 pub use protos::InputScriptType;
@@ -380,15 +379,20 @@ impl Trezor {
 		}
 	}
 
-	pub fn init_device(&mut self) -> Result<()> {
-		let features = self.initialize()?.ok()?;
+	pub fn init_device(&mut self, session_id: Option<&[u8]>) -> Result<()> {
+		let features = self.initialize(session_id)?.ok()?;
 		self.features = Some(features);
 		Ok(())
 	}
 
-	pub fn initialize(&mut self) -> Result<TrezorResponse<Features, Features>> {
+	pub fn initialize(
+		&mut self,
+		session_id: Option<&[u8]>,
+	) -> Result<TrezorResponse<Features, Features>> {
 		let mut req = protos::Initialize::new();
-		req.set_state(Vec::new());
+		if let Some(session_id) = session_id {
+			req.set_session_id(session_id.to_vec());
+		}
 		self.call(req, Box::new(|_, m| Ok(m)))
 	}
 
@@ -472,7 +476,6 @@ impl Trezor {
 		label: Option<String>,
 		use_passphrase: Option<bool>,
 		homescreen: Option<Vec<u8>>,
-		passphrase_source: Option<PassphraseSource>,
 		auto_lock_delay_ms: Option<usize>,
 	) -> Result<TrezorResponse<(), protos::Success>> {
 		let mut req = protos::ApplySettings::new();
@@ -484,9 +487,6 @@ impl Trezor {
 		}
 		if let Some(homescreen) = homescreen {
 			req.set_homescreen(homescreen);
-		}
-		if let Some(passphrase_source) = passphrase_source {
-			req.set_passphrase_source(passphrase_source);
 		}
 		if let Some(auto_lock_delay_ms) = auto_lock_delay_ms {
 			req.set_auto_lock_delay_ms(auto_lock_delay_ms as u32);

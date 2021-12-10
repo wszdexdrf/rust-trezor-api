@@ -7,7 +7,7 @@ fn main() {
 		println!("- {}", t);
 		{
 			let mut client = t.connect().unwrap();
-			println!("{:?}", client.initialize().unwrap());
+			println!("{:?}", client.initialize(None).unwrap());
 		}
 	}
 }

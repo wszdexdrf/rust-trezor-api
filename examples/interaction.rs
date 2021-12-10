@@ -33,7 +33,7 @@ fn handle_interaction<T, R: TrezorMessage>(resp: TrezorResponse<T, R>) -> Result
 fn do_main() -> Result<(), trezor::Error> {
 	// init with debugging
 	let mut trezor = trezor::unique(true)?;
-	trezor.init_device()?;
+	trezor.init_device(None)?;
 
 	let xpub = handle_interaction(trezor.get_public_key(
 		vec![

@@ -15,7 +15,7 @@ fn read_pin() -> String {
 fn do_main() -> Result<(), trezor::Error> {
 	// init with debugging
 	let mut trezor = trezor::unique(true)?;
-	trezor.init_device()?;
+	trezor.init_device(None)?;
 
 	let old_pin = trezor.change_pin(false)?.button_request()?.ack()?.pin_matrix_request()?;
 

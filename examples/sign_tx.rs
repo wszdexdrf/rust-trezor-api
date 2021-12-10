@@ -70,7 +70,7 @@ fn main() {
 	setup_logger();
 	// init with debugging
 	let mut trezor = trezor::unique(true).unwrap();
-	trezor.init_device().unwrap();
+	trezor.init_device(None).unwrap();
 
 	let pubkey = handle_interaction(
 		trezor
