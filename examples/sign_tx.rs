@@ -9,7 +9,7 @@ use std::io::{self, Write};
 
 use bitcoin::{
 	blockdata::script::Builder, consensus::encode::Decodable, network::constants::Network,
-	util::bip32, util::hash::BitcoinHash, util::psbt, Address, OutPoint, Transaction, TxIn, TxOut,
+	util::bip32, util::hash::BitcoinHash, util::psbt, Address, Transaction, TxIn, TxOut,
 };
 
 use trezor::{Error, SignTxProgress, TrezorMessage, TrezorResponse};
@@ -75,11 +75,11 @@ fn main() {
 	let pubkey = handle_interaction(
 		trezor
 			.get_public_key(
-				vec![
+				&vec![
 					bip32::ChildNumber::from_hardened_idx(0).unwrap(),
 					bip32::ChildNumber::from_hardened_idx(0).unwrap(),
 					bip32::ChildNumber::from_hardened_idx(1).unwrap(),
-				],
+				].into(),
 				trezor::protos::InputScriptType::SPENDADDRESS,
 				Network::Testnet,
 				true,
