@@ -33,7 +33,7 @@ fn do_main() -> Result<(), trezor::Error> {
 
 	let mut trezor = device_selector();
 	trezor.init_device(None)?;
-	let f = trezor.features().expect("no features");
+	let f = trezor.features().expect("no features").clone();
 
 	println!("Features:");
 	println!("vendor: {}", f.get_vendor());
@@ -56,9 +56,15 @@ fn do_main() -> Result<(), trezor::Error> {
 			))
 			.unwrap()
 	);
+	drop(trezor);
+
+	let mut trezor2 = device_selector();
+
+	trezor2.init_device(Some(f.get_session_id().to_vec()))?;
+
 	println!(
 		"{:?}",
-		trezor
+		trezor2
 			.ethereum_get_address(trezor::utils::convert_path(
 				&util::bip32::DerivationPath::from_str("m/44'/60'/1'/0/0").unwrap(),
 			))
