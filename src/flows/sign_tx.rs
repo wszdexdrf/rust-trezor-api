@@ -62,9 +62,9 @@ fn ack_input_request(
 		let txout = if let Some(ref txout) = psbt_input.witness_utxo {
 			txout
 		} else if let Some(ref tx) = psbt_input.non_witness_utxo {
-			tx.output
-				.get(input.previous_output.vout as usize)
-				.ok_or_else(|| Error::InvalidPsbt(format!("invalid utxo for PSBT input {}", input_index)))?
+			tx.output.get(input.previous_output.vout as usize).ok_or_else(|| {
+				Error::InvalidPsbt(format!("invalid utxo for PSBT input {}", input_index))
+			})?
 		} else {
 			return Err(Error::InvalidPsbt(format!("no utxo for PSBT input {}", input_index)));
 		};
