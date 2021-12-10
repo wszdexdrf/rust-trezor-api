@@ -704,9 +704,8 @@ impl Trezor {
 		req.set_data_length(data.len() as u32);
 		req.set_data_initial_chunk(data.splice(..std::cmp::min(1024, data.len()), []).collect());
 
-		let mut resp = handle_interaction(
-			self.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m))).unwrap(),
-		)?;
+		let mut resp =
+			handle_interaction(self.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))?)?;
 
 		while resp.get_data_length() > 0 {
 			let mut ack = protos::EthereumTxAck::new();
