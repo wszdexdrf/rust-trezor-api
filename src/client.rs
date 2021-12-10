@@ -379,7 +379,7 @@ impl Trezor {
 		}
 	}
 
-	pub fn init_device(&mut self, session_id: Option<&[u8]>) -> Result<()> {
+	pub fn init_device(&mut self, session_id: Option<Vec<u8>>) -> Result<()> {
 		let features = self.initialize(session_id)?.ok()?;
 		self.features = Some(features);
 		Ok(())
@@ -387,11 +387,11 @@ impl Trezor {
 
 	pub fn initialize(
 		&mut self,
-		session_id: Option<&[u8]>,
+		session_id: Option<Vec<u8>>,
 	) -> Result<TrezorResponse<Features, Features>> {
 		let mut req = protos::Initialize::new();
 		if let Some(session_id) = session_id {
-			req.set_session_id(session_id.to_vec());
+			req.set_session_id(session_id);
 		}
 		self.call(req, Box::new(|_, m| Ok(m)))
 	}
