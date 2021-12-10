@@ -35,16 +35,19 @@ fn do_main() -> Result<(), trezor::Error> {
 	let mut trezor = trezor::unique(true)?;
 	trezor.init_device(None)?;
 
-	let xpub = handle_interaction(trezor.get_public_key(
-		&vec![
-			bip32::ChildNumber::from_hardened_idx(0).unwrap(),
-			bip32::ChildNumber::from_hardened_idx(0).unwrap(),
-			bip32::ChildNumber::from_hardened_idx(0).unwrap(),
-		].into(),
-		trezor::protos::InputScriptType::SPENDADDRESS,
-		Network::Testnet,
-		true,
-	)?)?;
+	let xpub = handle_interaction(
+		trezor.get_public_key(
+			&vec![
+				bip32::ChildNumber::from_hardened_idx(0).unwrap(),
+				bip32::ChildNumber::from_hardened_idx(0).unwrap(),
+				bip32::ChildNumber::from_hardened_idx(0).unwrap(),
+			]
+			.into(),
+			trezor::protos::InputScriptType::SPENDADDRESS,
+			Network::Testnet,
+			true,
+		)?,
+	)?;
 	println!("{}", xpub);
 	println!("{:?}", xpub);
 	println!("{}", Address::p2pkh(&xpub.public_key, Network::Testnet));

@@ -584,38 +584,35 @@ impl Trezor {
 		let mut req = protos::EthereumGetAddress::new();
 		req.set_address_n(path.clone());
 
-		Ok(handle_interaction(
-			self.call(req, Box::new(|_, m: protos::EthereumAddress| Ok(m.get_address().into())))
-				.unwrap(),
-		)
-		.unwrap())
+		let address = handle_interaction(
+			self.call(req, Box::new(|_, m: protos::EthereumAddress| Ok(m.get_address().into())))?,
+		)?;
+		Ok(address)
 	}
 
 	pub fn ethereum_sign_message(&mut self, message: Vec<u8>, path: Vec<u32>) -> Result<Signature> {
 		let mut req = protos::EthereumSignMessage::new();
 		req.set_address_n(path);
 		req.set_message(message);
-		Ok(handle_interaction(
-			self.call(
-				req,
-				Box::new(|_, m: protos::EthereumMessageSignature| {
-					let signature = m.get_signature();
+		let signature = handle_interaction(self.call(
+			req,
+			Box::new(|_, m: protos::EthereumMessageSignature| {
+				let signature = m.get_signature();
 
-					// why are you in the end
-					let v = signature[64] as u64;
-					let r = U256::from_big_endian(&signature[0..32]);
-					let s = U256::from_big_endian(&signature[32..64]);
+				// why are you in the end
+				let v = signature[64] as u64;
+				let r = U256::from_big_endian(&signature[0..32]);
+				let s = U256::from_big_endian(&signature[32..64]);
 
-					Ok(Signature {
-						r,
-						v,
-						s,
-					})
-				}),
-			)
-			.unwrap(),
-		)
-		.unwrap())
+				Ok(Signature {
+					r,
+					v,
+					s,
+				})
+			}),
+		)?)?;
+
+		Ok(signature)
 	}
 
 	pub fn ethereum_sign_tx(
@@ -643,25 +640,18 @@ impl Trezor {
 		req.set_data_length(data.len() as u32);
 		req.set_data_initial_chunk(data.splice(..std::cmp::min(1024, data.len()), []).collect());
 
-		let mut resp = handle_interaction(
-			self.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m))).unwrap(),
-		)
-		.unwrap();
+		let mut resp =
+			handle_interaction(self.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))?)?;
 
 		while resp.get_data_length() > 0 {
 			let mut ack = protos::EthereumTxAck::new();
-			ack.set_data_chunk(data.splice(..1024, []).collect());
+			ack.set_data_chunk(data.splice(..std::cmp::min(1024, data.len()), []).collect());
 
-			resp = self
-				.call(ack, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))
-				.unwrap()
-				.ok()
-				.unwrap();
+			resp = self.call(ack, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))?.ok()?;
 		}
 
 		if resp.get_signature_v() <= 1 {
 			resp.set_signature_v(resp.get_signature_v() + 2 * (chain_id as u32) + 35);
-			// v, r, s
 		}
 
 		Ok(Signature {
@@ -716,23 +706,17 @@ impl Trezor {
 
 		let mut resp = handle_interaction(
 			self.call(req, Box::new(|_, m: protos::EthereumTxRequest| Ok(m))).unwrap(),
-		)
-		.unwrap();
+		)?;
 
 		while resp.get_data_length() > 0 {
 			let mut ack = protos::EthereumTxAck::new();
-			ack.set_data_chunk(data.splice(..1024, []).collect());
+			ack.set_data_chunk(data.splice(..std::cmp::min(1024, data.len()), []).collect());
 
-			resp = self
-				.call(ack, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))
-				.unwrap()
-				.ok()
-				.unwrap();
+			resp = self.call(ack, Box::new(|_, m: protos::EthereumTxRequest| Ok(m)))?.ok()?
 		}
 
 		if resp.get_signature_v() <= 1 {
 			resp.set_signature_v(resp.get_signature_v() + 2 * (chain_id as u32) + 35);
-			// v, r, s
 		}
 
 		Ok(Signature {
@@ -741,59 +725,4 @@ impl Trezor {
 			s: resp.get_signature_s().into(),
 		})
 	}
-
-	// use std::any::type_name;
-	// fn type_of<T>(_: T) -> &'static str {
-	// 	type_name::<T>()
-	// }
-	// pub fn ethereum_sign_eip712(
-	// 	&mut self,
-	// 	path: Vec<u32>
-	// ) -> Result<()> {// Result<Signature> {
-	// 	let mut req = protos::EthereumSignTypedData::new();
-	// 	req.set_address_n(path);
-	// 	req.set_metamask_v4_compat(true); // TODO is it ?
-	// 	req.set_primary_type("what is it".into());
-
-	// 	let resp = handle_interaction(
-	// 		self.call(req, Box::new(|_, m: protos::EthereumTypedDataStructRequest | {
-	// 			Ok(m)
-	// 		}
-	// 		))
-	// 			.unwrap(),
-	// 	)
-	// 	.unwrap();
-
-	// 	let resp_type = type_of(&resp);
-
-	// 	while type_of(&resp) == resp_type {
-	// 		let mut req = protos::EthereumTypedDataStructAck_EthereumStructMember::new();
-	// 		// req.set_field_type(v)
-	// 		// req.set_name(v)
-
-	// 	}
-
-	// // 	data: Dict[str, Any],
-	// // 	*,
-	// // 	metamask_v4_compat: bool = True,
-	// // ) -> "MessageType":
-	// // 	data = sanitize_typed_data(data)
-	// // 	types = data["types"]
-	// 	// while isinstance(response, messages.EthereumTypedDataStructRequest):
-	// 		// struct_name = response.name
-
-	// 		// members: List["messages.EthereumStructMember"] = []
-	// 		// for field in types[struct_name]:
-	// 		//     field_type = get_field_type(field["type"], types)
-	// 		//     struct_member = messages.EthereumStructMember(
-	// 		//         type=field_type,
-	// 		//         name=field["name"],
-	// 		//     )
-	// 		//     members.append(struct_member)
-
-	// 		// request = messages.EthereumTypedDataStructAck(members=members)
-	// 		// response = client.call(request)
-
-	// 	Ok(())
-	// }
 }

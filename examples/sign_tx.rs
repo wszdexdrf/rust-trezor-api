@@ -79,7 +79,8 @@ fn main() {
 					bip32::ChildNumber::from_hardened_idx(0).unwrap(),
 					bip32::ChildNumber::from_hardened_idx(0).unwrap(),
 					bip32::ChildNumber::from_hardened_idx(1).unwrap(),
-				].into(),
+				]
+				.into(),
 				trezor::protos::InputScriptType::SPENDADDRESS,
 				Network::Testnet,
 				true,
