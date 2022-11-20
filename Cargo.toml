@@ -1,6 +1,6 @@
 [package]
 name = "trezor-client"
-version = "0.0.6"
+version = "0.0.7"
 authors = ["joshie", "romanz", "Steven Roose <steven@stevenroose.org>"]
 license = "CC0-1.0"
 homepage = "https://github.com/joshieDo/rust-trezor-api"
@@ -21,7 +21,7 @@ bitcoin-bech32 = { version = "0.9.0", optional = true }
 secp256k1 = { version = "0.12.0", optional = true }
 
 # ethereum
-primitive-types = { version = "0.11.1", default-features = false, optional = true }
+primitive-types = { version = "0.12.1", default-features = false, optional = true }
 
 protobuf = "2.0"
 byteorder = "1.2"
