@@ -36,6 +36,7 @@ primitive-types = { version = "0.12", default-features = false, optional = true 
 
 [dev-dependencies]
 tracing-subscriber = "0.3"
+serial_test = "2.0.0"
 
 [features]
 default = ["bitcoin", "ethereum"]

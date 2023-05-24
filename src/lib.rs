@@ -130,3 +130,59 @@ pub fn unique(debug: bool) -> Result<Trezor> {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::str::FromStr;
+    use serial_test::serial;
+
+    use bitcoin::bip32::DerivationPath;
+
+    use super::*;
+
+    fn init_emulator() -> Trezor {
+        let mut emulator = find_devices(false)
+            .into_iter()
+            .find(|t| t.model == Model::TrezorEmulator)
+            .expect("No emulator found")
+            .connect()
+            .expect("Failed to connect to emulator");
+        emulator.init_device(None).expect("Failed to intialize device");
+        emulator
+    }
+
+    #[test]
+    #[serial]
+    fn test_emulator_find() {
+        let trezors = find_devices(false);
+        assert!(trezors.len() > 0);
+        assert!(trezors.iter().any(|t| t.model == Model::TrezorEmulator));
+    }
+
+    #[test]
+    #[serial]
+    fn test_emulator_features() {
+        let emulator = init_emulator();
+        let features = emulator.features().expect("Failed to get features");
+        assert_eq!(features.vendor(), "trezor.io");
+        assert_eq!(features.initialized(), true);
+        assert_eq!(features.firmware_present(), false);
+        assert_eq!(features.model(), "T");
+        assert_eq!(features.initialized(), true);
+        assert_eq!(features.pin_protection(), false);
+        assert_eq!(features.passphrase_protection(), false);
+
+    }
+
+    #[test]
+    #[serial]
+    fn test_bitcoin_address() {
+        let mut emulator = init_emulator();
+        assert_eq!(emulator.features().expect("Failed to get features").label(), "SLIP-0014");
+        let path = DerivationPath::from_str("m/44'/1'/0'/0/0").expect("Failed to parse path");
+        let address = emulator
+            .get_address(&path, InputScriptType::SPENDADDRESS, bitcoin::Network::Testnet, false)
+            .expect("Failed to get address");
+        assert_eq!(address.ok().unwrap().to_string(), "mvbu1Gdy8SUjTenqerxUaZyYjmveZvt33q");
+    }
+}
