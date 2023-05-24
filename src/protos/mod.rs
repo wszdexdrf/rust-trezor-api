@@ -1,4 +1,4 @@
-#![allow(ambiguous_glob_reexports, unknown_lints, rustdoc::all)]
+#![allow(unknown_lints, ambiguous_glob_reexports, rustdoc::all)]
 
 // Common
 pub mod messages;
